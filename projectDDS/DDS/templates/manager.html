@@ -1,0 +1,207 @@
+ {% extends "index.html" %}
+
+ {% block content %}
+    <div class="container mt-5">
+        <h2>Управление справочниками</h2>
+
+        <!-- Список статусов -->
+        <h3>Статусы</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Активный</td>
+                    <td>
+                        <a href="#" class="btn btn-primary btn-sm">Редактировать</a>
+                        <a href="#" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Неактивный</td>
+                    <td>
+                        <a href="#" class="btn btn-primary btn-sm">Редактировать</a>
+                        <a href="#" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addStatusModal">Добавить статус</button>
+
+        <!-- Список типов -->
+        <h3 class="mt-5">Типы</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Тип 1</td>
+                    <td>
+                        <a href="#" class="btn btn-primary btn-sm">Редактировать</a>
+                        <a href="#" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addTypeModal">Добавить тип</button>
+
+        <!-- Модальные окна для добавления новых элементов -->
+        <!-- Модальное окно для добавления статуса -->
+        <div class="modal" id="addStatusModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Добавить статус</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="statusName">Название статуса</label>
+                                <input type="text" id="statusName" class="form-control" placeholder="Введите название статуса" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Добавить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для добавления типа -->
+        <div class="modal" id="addTypeModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Добавить тип</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="typeName">Название типа</label>
+                                <input type="text" id="typeName" class="form-control" placeholder="Введите название типа" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Добавить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+  <h3 class="mt-5">Категории</h3>
+
+ <table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Категория 1</td>
+            <td>
+                <a href="#" class="btn btn-primary btn-sm">Редактировать</a>
+                <a href="#" class="btn btn-danger btn-sm">Удалить</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<button class="btn btn-success" data-toggle="modal" data-target="#addCategoryModal">Добавить категорию</button>
+
+<!-- Подкатегории -->
+<h3 class="mt-5">Подкатегории</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Категория</th>
+            <th>Подкатегория</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Категория 1</td>
+            <td>Подкатегория A</td>
+            <td>
+                <a href="#" class="btn btn-primary btn-sm">Редактировать</a>
+                <a href="#" class="btn btn-danger btn-sm">Удалить</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<button class="btn btn-success" data-toggle="modal" data-target="#addSubcategoryModal">Добавить подкатегорию</button>
+
+
+<!-- Модальное окно для добавления категории -->
+<div class="modal" id="addCategoryModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Добавить категорию</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="categoryName">Название категории</label>
+                        <input type="text" id="categoryName" class="form-control" placeholder="Введите название категории" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Модальное окно для добавления подкатегории -->
+<div class="modal" id="addSubcategoryModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Добавить подкатегорию</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="subcategoryCategory">Категория</label>
+                        <select id="subcategoryCategory" class="form-control" required>
+                            <option value="">Выберите категорию</option>
+                            <option value="1">Категория 1</option>
+                            <option value="2">Категория 2</option>
+                            <!-- Значения будут обновляться динамически -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="subcategoryName">Название подкатегории</label>
+                        <input type="text" id="subcategoryName" class="form-control" placeholder="Введите подкатегорию" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <div class="marg">
+   <a href="{% url 'index' %}" class="btn btn-primary">Назад</a>
+ </div>
+    <!-- Подключение Bootstrap JS и зависимостей -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  {% endblock %}

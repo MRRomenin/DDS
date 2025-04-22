@@ -1,10 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+ {% extends "index.html" %}
 
-</body>
-</html>
+ {% block content %}
+<h1>Создание\редактирование записи</h1>
+<form>
+
+  <div class="mb-3">
+    <label class="form-label">Статус: </label>
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg пример">
+      <option selected>Выберите статус</option>
+      <option value="1">Бизнес</option>
+      <option value="2">Личное</option>
+      <option value="3">Налог</option>
+      <option value="3">Расширить список</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Тип: </label>
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg пример">
+      <option selected>Выберите тип</option>
+      <option value="1">Пополнение</option>
+      <option value="2">Списание</option>
+      <option value="3">Расширить список</option>
+    </select>
+  </div>
+
+<!--  дата с волидатором-->
+  <div class="form-group">
+        <label for="date">Дата</label>
+        <input type="date" id="date" name="date" class="form-control" required>
+        <small class="form-text text-muted">Пожалуйста, выберите дату.</small>
+    </div>
+
+  <div class="mb-3">
+      <label for="disabledSelect" class="form-label">Выберите категорию</label>
+      <select class="form-select">
+        <option>Категории</option>
+        <option value="1">Инфраструктура</option>
+        <option value="2">Маркетинг</option>
+        <option value="3">Расширить список</option>
+
+      </select>
+    </div>
+
+
+  <fieldset disabled>
+    <div class="mb-3">
+      <label for="disabledSelect" class="form-label">Выберите подкатегорию</label>
+      <select id="disabledSelect" class="form-select">
+        <option>Подкатегории</option>
+        <option value="1">Один</option>
+        <option value="2">Два</option>
+        <option value="3">Три</option>
+
+      </select>
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+      <label for="amount">Сумма</label>
+      <div class="input-group">
+          <input type="text" id="amount" name="amount" class="form-control" placeholder="Введите сумму" required>
+          <div class="input-group-append">
+              <span class="input-group-text">р</span>
+          </div>
+      </div>
+      <small class="form-text text-muted">Введите сумму в формате: 1000 р</small>
+  </div>
+
+
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">Комментарии</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+
+    <button type="submit" class="btn btn-primary">Создать</button>
+  <button type="submit" class="btn btn-primary">Редактировать</button>
+</form>
+
+ <div class="marg">
+   <a href="{% url 'index' %}" class="btn btn-primary">Назад</a>
+ </div>
+
+ {% endblock %}
