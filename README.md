@@ -5,6 +5,7 @@
 Запуск проекта:
 
 Базу данных sqlite прописываешь в settings.py:
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
