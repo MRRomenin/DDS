@@ -30,6 +30,8 @@
                         <td>{{ i.subcategory }}</td>
                         <td>{{ i.amount }}</td>
                         <td>{{ i.comment }}</td>
+                        <td><a href="edit/{{transact.id}}" class="btn btn-primary">Изменить</a> <br>
+                            <a href="{% url 'delete' i.id %}" class="btn btn-primary marg">Удалить</a></td>
                     </tr>
                         {% endfor %}
         </tr>
@@ -80,9 +82,9 @@
       </tbody>
     </table>
      <div>
-        <a href="{% url 'create_entry' %}" class="btn btn-primary">Создать/редактировать запись</a>
+        <a href="{% url 'create_entry' %}" class="btn btn-primary">Создать запись</a>
           <a href="{% url 'manager' %}" class="btn btn-primary">Управление справочником</a>
-         <button type="button" class="btn btn-primary">Удалить запись</button>
+<!--         <button type="button" class="btn btn-primary">Удалить запись</button>-->
     </div>
  </div>
  {% endblock %}
