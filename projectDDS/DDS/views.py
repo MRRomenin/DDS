@@ -2,12 +2,14 @@ from django.shortcuts import render, redirect
 from rest_framework import viewsets
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from rest_framework import status
+from rest_framework.generics import get_object_or_404
+
 from .models import *
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializers import SerializersTransaction
-
+from django.http import JsonResponse
 from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
 
@@ -89,6 +91,13 @@ def create_entry(request):
     return render(request, 'create_entry.html', {'transact_create': transact_create, 'status': status,
         'type': type, 'category': category, 'subcategory': subcategory})
 
+
+def get_subcategories(request, category_id):
+    subcategories = Subcategory.objects.filter(category_id=category_id)
+    subcategories_data = list(subcategories.values('id', 'name_subcategory'))
+
+    return JsonResponse(subcategories_data, safe=False)
+
 def delete(request, id):
     try:
         transact = Transaction.objects.get(id=id)
@@ -97,28 +106,116 @@ def delete(request, id):
     except Transaction.DoesNotExist:
         return HttpResponseNotFound("<h2>Product not found</h2>")
 
+
+def edit(request, id):
+    # Получаем транзакцию по ID
+    transaction = get_object_or_404(Transaction, id=id)
+
+    # Если запрос POST, обрабатываем форму
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        transaction_type = request.POST.get('type')
+        category = request.POST.get('category')
+        subcategory = request.POST.get('subcategory')
+        amount = request.POST.get('amount')
+        comment = request.POST.get('comments')
+
+        # Обновляем транзакцию
+        transaction.status_id = status
+        transaction.type_id = transaction_type
+        transaction.category_id = category
+        transaction.subcategory_id = subcategory
+        transaction.amount = amount
+        transaction.comment = comment
+        transaction.save()
+
+        return redirect('/DDS/')  # После редактирования, перенаправляем на главную страницу
+
+    else:
+        # Для GET-запроса передаем транзакцию в форму для редактирования
+        status = Status.objects.all()
+        type = Type.objects.all()
+        category = Category.objects.all()
+        subcategory = Subcategory.objects.filter(
+            category=transaction.category)  # Фильтруем подкатегории по выбранной категории
+
+        return render(request, 'edit.html', {
+            'transaction': transaction,
+            'status': status,
+            'type': type,
+            'category': category,
+            'subcategory': subcategory
+        })
+
+
 class AuthorDelete(DeleteView):
     model = Transaction
     success_url = reverse_lazy('author-list')
 
+# def manager(request):
+#     return render(request, 'manager.html')
+
 def manager(request):
-    return render(request, 'manager.html')
+    statuses = Status.objects.all()
+    types = Type.objects.all()
+    categories = Category.objects.all()
+    subcategories = Subcategory.objects.all()
+    # Извлекаем все статусы из базы данных
+    return render(request, "manager.html", {"statuses": statuses, "types": types,
+                                            "categories": categories, "subcategories": subcategories})
+
+def manager_add(request):
+    if request.method == "POST":
+        name = request.POST.get("name_status")
+        if name:
+            Status.objects.create(name_status=name)
+    return redirect("manager")  # Название URL маршрута
+
+def manager_delete(request, id):
+    status = get_object_or_404(Status, id=id)
+    status.delete()
+    return redirect("manager")
 
 
 
+def manager_add_type(request):
+    if request.method == "POST":
+        name_type = request.POST.get("name_type")
+        if name_type:
+            Type.objects.create(name_type=name_type)
+    return redirect("manager")  # Название URL маршрута
 
-# def add_transaction(request):
-#     if request.method == 'POST':
-#         form = TransactionForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('transaction-list')  # Перенаправляем на страницу со списком транзакций
-#     else:
-#         form = TransactionForm()
-#     return render(request, 'add_transaction.html', {'form': form})
-#
-# def transaction_list(request):
-#     transactions = Transaction.objects.all()
-#     return render(request, 'transaction_list.html', {'transactions': transactions})
+def manager_delete_type(request, id):
+    type_instance = get_object_or_404(Type, id=id)
+    type_instance.delete()
+    return redirect("manager")
+
+
+def manager_add_category(request):
+    if request.method == "POST":
+        name_category = request.POST.get("name_category")
+        if name_category:
+            Category.objects.create(name_category=name_category)
+    return redirect("manager")  # Название URL маршрута
+
+def manager_delete_category(request, id):
+    category_instance = get_object_or_404(Category, id=id)
+    category_instance.delete()
+    return redirect("manager")
+
+
+def manager_add_subcategory(request):
+    if request.method == 'POST':
+        category_id = request.POST.get('category')  # ID выбранной категории
+        name_subcategory = request.POST.get('name_subcategory')  # Название подкатегории
+        category = get_object_or_404(Category, id=category_id)  # Получаем категорию по ID
+        if name_subcategory:
+            Subcategory.objects.create(category=category, name_subcategory=name_subcategory)  # Создаём подкатегорию
+        return redirect('manager')
+
+def manager_delete_subcategory(request, id):
+    subcategory_instance = get_object_or_404(Subcategory, id=id)
+    subcategory_instance.delete()
+    return redirect("manager")
 
 # Create your views here.

@@ -10,11 +10,11 @@
       <thead>
         <tr>
 <!--              <th scope="col">№</th>-->
-              <th scope="col">Название компании</th>
-              <th scope="col">Дата Создания</th>
               <th scope="col">Статус</th>
+              <th scope="col">Дата Создания</th>
+              <th scope="col">Категория</th>
             <th scope="col">Тип</th>
-            <th scope="col">Категория и подкатегория</th>
+            <th scope="col">Подкатегория</th>
             <th scope="col">Сумма</th>
             <th scope="col">Комментарий</th>
         </tr>
@@ -24,13 +24,13 @@
           {% for i in transact %}
                     <tr class='success'>
                         <td>{{ i.status }}</td>
-                        <td>{{ i.type }}</td>
+                        <td>{{ i.date |date:"d.m.Y"}}</td>
                         <td>{{ i.category }}</td>
-                        <td>{{ i.date }}</td>
+                        <td>{{ i.type }}</td>
                         <td>{{ i.subcategory }}</td>
                         <td>{{ i.amount }}</td>
                         <td>{{ i.comment }}</td>
-                        <td><a href="edit/{{transact.id}}" class="btn btn-primary">Изменить</a> <br>
+                        <td><a href="{% url 'edit' i.id %}" class="btn btn-primary">Изменить</a> <br>
                             <a href="{% url 'delete' i.id %}" class="btn btn-primary marg">Удалить</a></td>
                     </tr>
                         {% endfor %}

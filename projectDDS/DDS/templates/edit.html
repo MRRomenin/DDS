@@ -1,109 +1,78 @@
 {% extends "index.html" %}
 
 {% block content %}
+{% load static %}
+
 <h1>Редактирование записи</h1>
 <form method="POST">
     {% csrf_token %}
 
-  <div class="mb-3">
-    <label class="form-label">Статус: </label>
-    <select class="form-select form-select-lg mb-3" name="status" aria-label=".form-select-lg пример">
-      <option selected>Выберите статус</option>
-      {% for i in status %}
-          <option value="{{ i.id }}">{{ i.name_status }}</option>
-      {% endfor %}
-    </select>
-  </div>
 
-  <div class="mb-3">
-    <label class="form-label">Тип: </label>
-    <select class="form-select form-select-lg mb-3" name="type" aria-label=".form-select-lg пример">
-      <option selected>Выберите тип</option>
-     {% for i in type %}
-          <option value="{{ i.id }}">{{ i.name_type }}</option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <div class="mb-3">
-    <label for="categorySelect" class="form-label">Выберите категорию</label>
-    <select id="categorySelect" class="form-select" name="category" required>
-      <option value="" selected>Категории</option>
-      {% for i in category %}
-          <option value="{{ i.id }}">{{ i.name_category }}</option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <div class="mb-3">
-    <label for="subcategorySelect" class="form-label">Выберите подкатегорию</label>
-    <select id="subcategorySelect" class="form-select" name="subcategory" disabled>
-      <option value="">Подкатегории</option>
-      {% for i in subcategory %}
-          <option value="{{ i.id }}">{{ i.name_subcategory }}</option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <script>
-    const categorySelect = document.getElementById('categorySelect');
-    const subcategorySelect = document.getElementById('subcategorySelect');
-
-    categorySelect.addEventListener('change', function () {
-      if (this.value) {
-        subcategorySelect.disabled = false;
-      } else {
-        subcategorySelect.disabled = true;
-        subcategorySelect.selectedIndex = 0;
-      }
-    });
-  </script>
-
-
-
-<!--    <script>-->
-<!--  // Отслеживаем отправку формы-->
-<!--  const form = document.querySelector('form');-->
-<!--  form.addEventListener('submit', function(event) {-->
-<!--    event.preventDefault();  // Отменяет стандартное поведение формы (не отправлять)-->
-
-<!--    // Печатаем данные формы в консоль-->
-<!--    const formData = new FormData(form);-->
-<!--    for (const [key, value] of formData.entries()) {-->
-<!--      console.log(`${key}: ${value}`);-->
-<!--    }-->
-
-<!--    // Отправляем форму через AJAX, если нужно-->
-<!--    fetch(form.action, {-->
-<!--      method: 'POST',-->
-<!--      body: formData-->
-<!--    }).then(response => response.text())-->
-<!--      .then(data => {-->
-<!--        alert("Форма отправлена!");-->
-<!--        console.log(data);  // Показываем ответ от сервера-->
-<!--      }).catch(error => {-->
-<!--        console.error('Ошибка:', error);-->
-<!--      });-->
-<!--  });-->
-<!--</script>-->
-
-  <div class="form-group">
-    <label for="amount">Сумма</label>
-    <div class="input-group">
-        <input type="text" id="amount" name="amount" class="form-control" placeholder="Введите сумму" required>
-        <div class="input-group-append">
-            <span class="input-group-text">р</span>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Статус: </label>
+        <select class="form-select form-select-lg mb-3" name="status" aria-label=".form-select-lg пример">
+            <option value="">Выберите статус</option>
+            {% for s in status %}
+                <option value="{{ s.id }}" {% if s.id == transaction.status.id %}selected{% endif %}>
+                    {{ s.name_status }}
+                </option>
+            {% endfor %}
+        </select>
     </div>
-    <small class="form-text text-muted">Введите сумму в формате: 1000 р</small>
-  </div>
 
-  <div class="mb-3">
-    <label for="comments" class="form-label">Комментарии</label>
-    <textarea class="form-control" id="comments" name="comments" rows="3"></textarea>
-  </div>
+    <div class="mb-3">
+        <label class="form-label">Тип: </label>
+        <select class="form-select form-select-lg mb-3" name="type" aria-label=".form-select-lg пример">
+            <option value="">Выберите тип</option>
+            {% for t in type %}
+                <option value="{{ t.id }}" {% if t.id == transaction.type.id %}selected{% endif %}>
+                    {{ t.name_type }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
 
-  <button type="submit" class="btn btn-primary">Создать</button>
+    <div class="mb-3">
+        <label for="categorySelect" class="form-label">Выберите категорию</label>
+        <select id="categorySelect" class="form-select" name="category" required>
+            <option value="">Категории</option>
+            {% for c in category %}
+                <option value="{{ c.id }}" {% if c.id == transaction.category.id %}selected{% endif %}>
+                    {{ c.name_category }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="subcategorySelect" class="form-label">Выберите подкатегорию</label>
+        <select id="subcategorySelect" class="form-select" name="subcategory" required>
+            <option value="">Подкатегории</option>
+            {% for sc in subcategory %}
+                <option value="{{ sc.id }}" {% if sc.id == transaction.subcategory.id %}selected{% endif %}>
+                    {{ sc.name_subcategory }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="amount">Сумма</label>
+        <div class="input-group">
+            <input type="text" id="amount" name="amount" class="form-control" value="{{ transaction.amount }}" placeholder="Введите сумму" required>
+            <div class="input-group-append">
+                <span class="input-group-text">р</span>
+            </div>
+        </div>
+        <small class="form-text text-muted">Введите сумму в формате: 1000 р</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="comments" class="form-label">Комментарии</label>
+        <textarea class="form-control" id="comments" name="comments" rows="3">{{ transaction.comment }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
 
   <div class="marg">
     <a href="{% url 'index' %}" class="btn btn-primary">Назад</a>
