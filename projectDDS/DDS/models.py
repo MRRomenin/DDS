@@ -1,6 +1,10 @@
 from django.db import models
 import datetime
 
+"""В ORM представлено несколько моделей: такие как Status, Type, Category, SubCategory и Transaction. 
+    Все модели имеют внешний ключ у Transaction. Модель Date не был реализован."""
+
+
 class Status(models.Model):
     name_status = models.CharField(max_length=255)
 
