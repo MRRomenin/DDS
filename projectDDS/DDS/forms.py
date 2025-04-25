@@ -1,6 +1,8 @@
 from django import forms
 from .models import *
 
+"""В даннном проекте формы не используются"""
+
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction

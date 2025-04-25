@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-
+"""Из подключенных есть DDS и rest_framework"""
 
 INSTALLED_APPS = [
     'django.contrib.admin',

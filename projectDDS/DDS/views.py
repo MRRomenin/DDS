@@ -3,7 +3,6 @@ from rest_framework import viewsets
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
-
 from .models import *
 from rest_framework import generics
 from rest_framework.response import Response
@@ -15,9 +14,6 @@ from django.urls import reverse_lazy
 
 
 # @api_view(['GET'])
-
-
-
 
 # def getData(request):
 #     if request.method == 'GET':
@@ -47,15 +43,18 @@ from django.urls import reverse_lazy
 #     path('manager/', views.manager, name='manager'),
 #     serializer_class = SerializersTransaction
 
+
+"""Модуль index отвечает за публикацию страницы main, в котором 
+   перечислина таблица со значениями в БД"""
+
 def index(request):
     transact = Transaction.objects.all()
     return render(request, '../templates/index.html', locals())
 
 
+"""create_entry отвечает за вставку новых значений в БД через форму в create_entry.html"""
 
 def create_entry(request):
-    # transact_create = Transaction.objects.all()
-
     if request.method == 'POST':
 
         # Получаем данные из формы
@@ -66,7 +65,7 @@ def create_entry(request):
         amount = request.POST.get('amount')
         comment = request.POST.get('comments')
 
-        print(f"Status: {status}, Type: {transaction_type}, Amount: {amount}, Comments: {comment}")
+        # print(f"Status: {status}, Type: {transaction_type}, Amount: {amount}, Comments: {comment}")
         # Создание новой транзакции
         new_transaction = Transaction(
             status_id=status,
@@ -81,7 +80,6 @@ def create_entry(request):
         # После создания записи редиректим на другую страницу
         return redirect('/DDS/')  # Замените на URL, куда хотите перенаправить
 
-    # В случае GET-запроса передаем все объекты для селектов
     transact_create = Transaction.objects.all()  # Тут нужно подставить правильные объекты для селектов
 
     status = Status.objects.all()
@@ -91,13 +89,14 @@ def create_entry(request):
     return render(request, 'create_entry.html', {'transact_create': transact_create, 'status': status,
         'type': type, 'category': category, 'subcategory': subcategory})
 
-
+"""get_subcategories нужен для определения зависимостей и вывода для форм"""
 def get_subcategories(request, category_id):
     subcategories = Subcategory.objects.filter(category_id=category_id)
     subcategories_data = list(subcategories.values('id', 'name_subcategory'))
 
     return JsonResponse(subcategories_data, safe=False)
 
+"""delete удаляет записи из таблицы"""
 def delete(request, id):
     try:
         transact = Transaction.objects.get(id=id)
@@ -106,6 +105,7 @@ def delete(request, id):
     except Transaction.DoesNotExist:
         return HttpResponseNotFound("<h2>Product not found</h2>")
 
+"""edit вставляет записи в таблицы"""
 
 def edit(request, id):
     # Получаем транзакцию по ID
@@ -152,8 +152,10 @@ class AuthorDelete(DeleteView):
     model = Transaction
     success_url = reverse_lazy('author-list')
 
-# def manager(request):
-#     return render(request, 'manager.html')
+
+"""Здесь представлено в manage, manage_add и manage_delete отображение во вкладке "управление справочником" 
+    присутствует функция удаления и добавления новых статусов, типов, категорий, подкатегорий. Изменение Даты не была неализована.
+    Требуется рефакторинг структуры"""
 
 def manager(request):
     statuses = Status.objects.all()

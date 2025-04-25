@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Status, Type, Category, Subcategory, Transaction
 
+"""Настройки для админ панели для изменения, добавления в БД значений"""
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('status','type','category','date', 'subcategory', 'amount', 'comment')
 
