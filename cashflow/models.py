@@ -4,18 +4,6 @@ from django.urls import reverse
 import uuid
 
 
-class Date(models.Model):
-    date = models.DateTimeField(default=timezone.now,
-                                unique=True,
-                                )
-
-    def get_absolute_url(self):
-        return reverse('data', args=[str(self.id)])
-
-    def __str__(self):
-        return str(self.date)
-
-
 class Status(models.Model):
     status = models.CharField(max_length=100)
 
@@ -53,6 +41,7 @@ class Transaction(models.Model):
     status = models.ForeignKey('Status', on_delete=models.RESTRICT, null=True)
     type = models.ForeignKey('Type', on_delete=models.RESTRICT, null=True)
     categories = models.ForeignKey('Categories', on_delete=models.RESTRICT, null=True)
+    date = models.DateTimeField(default=timezone.now,
     amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Сумма")
     comment = models.TextField(
         max_length=1000, help_text="Enter about transaction",
