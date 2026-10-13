@@ -7,12 +7,20 @@ import uuid
 class Status(models.Model):
     name_status = models.CharField(max_length=100)
 
+    class Meta:
+        verbose_name = "Status"
+        verbose_name_plural = "Statuses"
+
     def __str__(self):
         return self.name_status
 
 
 class Type(models.Model):
     type_operation = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = "Type"
+        verbose_name_plural = "Types"
 
     def __str__(self):
         return self.type_operation
@@ -29,8 +37,15 @@ class Categories(models.Model):
     subcategories = models.ForeignKey('SubCategories', on_delete=models.RESTRICT, null=True)
     categories = models.CharField(max_length=100)
 
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
     def __str__(self):
         return f"{self.categories}, {self.subcategories}"
+    class Meta:
+        verbose_name = "SubCategory"
+        verbose_name_plural = "SubCategories"
 
 
 class Transaction(models.Model):
@@ -54,6 +69,14 @@ class Transaction(models.Model):
         return reverse('transaction-details', args=[str(self.id)])
 
     class Meta:
-        ordering = ['date', 'status', 'type', 'categories', 'amount', 'comment']
+        verbose_name = "Транзакция"
+        verbose_name_plural = "Транзакции"
+        ordering = ['-date']
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(amount__gte=0),
+                name='amount_gte_zero'
+            )
+        ]
 
 # Create your models here.
