@@ -26,15 +26,7 @@ class Type(models.Model):
         return self.type_operation
 
 
-class SubCategories(models.Model):
-    subcategories = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f"{self.subcategories}"
-
-
 class Categories(models.Model):
-    subcategories = models.ForeignKey('SubCategories', on_delete=models.RESTRICT, null=True)
     categories = models.CharField(max_length=100)
 
     class Meta:
@@ -42,10 +34,19 @@ class Categories(models.Model):
         verbose_name_plural = "Categories"
 
     def __str__(self):
-        return f"{self.categories}, {self.subcategories}"
+        return self.categories
+
+
+class SubCategories(models.Model):
+    category = models.ForeignKey('Categories', on_delete=models.CASCADE)
+    subcategories = models.CharField(max_length=100)
+
     class Meta:
         verbose_name = "SubCategory"
         verbose_name_plural = "SubCategories"
+
+    def __str__(self):
+        return self.subcategories
 
 
 class Transaction(models.Model):
@@ -57,6 +58,8 @@ class Transaction(models.Model):
     type = models.ForeignKey('Type', on_delete=models.RESTRICT, null=True)
     categories = models.ForeignKey('Categories', on_delete=models.RESTRICT, null=True)
     date = models.DateTimeField(default=timezone.now,
+    categories = models.ForeignKey('Categories', on_delete=models.RESTRICT, verbose_name='Категория')
+    subcategories = models.ForeignKey('SubCategories', on_delete=models.RESTRICT, verbose_name='Подкатегория')
     amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Сумма")
     comment = models.TextField(
         max_length=1000, help_text="Enter about transaction",
