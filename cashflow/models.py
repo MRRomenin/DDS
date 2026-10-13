@@ -52,21 +52,21 @@ class SubCategories(models.Model):
 class Transaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           editable=False)
-    title = models.CharField(max_length=255, verbose_name="Название")
-    date = models.ForeignKey('Date', on_delete=models.RESTRICT, null=True)
-    status = models.ForeignKey('Status', on_delete=models.RESTRICT, null=True)
-    type = models.ForeignKey('Type', on_delete=models.RESTRICT, null=True)
-    categories = models.ForeignKey('Categories', on_delete=models.RESTRICT, null=True)
+    title = models.CharField(max_length=255, verbose_name="Enter about transaction")
     date = models.DateTimeField(default=timezone.now,
+                                verbose_name='Дата и время')  # фиксация момента времени совершения транзакции
+    status = models.ForeignKey('Status', on_delete=models.RESTRICT, verbose_name='Статус')
+    operation_type = models.ForeignKey('Type', on_delete=models.RESTRICT, verbose_name='Тип')
     categories = models.ForeignKey('Categories', on_delete=models.RESTRICT, verbose_name='Категория')
     subcategories = models.ForeignKey('SubCategories', on_delete=models.RESTRICT, verbose_name='Подкатегория')
     amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Сумма")
     comment = models.TextField(
         max_length=1000, help_text="Enter about transaction",
-        null=True)
+        blank=True, verbose_name='Комментарий')
 
     def __str__(self):
-        return f"{self.title}, {self.amount}"
+        return (f"Transaction: {self.title}, date: {self.date}, status: {self.status}"
+                f", type: {self.operation_type}, categories: {self.categories}, {self.amount}")
 
     def get_absolute_url(self):
         return reverse('transaction-details', args=[str(self.id)])
