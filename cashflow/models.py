@@ -5,10 +5,10 @@ import uuid
 
 
 class Status(models.Model):
-    status = models.CharField(max_length=100)
+    name_status = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.status
+        return self.name_status
 
 
 class Type(models.Model):
