@@ -8,8 +8,8 @@ class Status(models.Model):
     name_status = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = "Status"
-        verbose_name_plural = "Statuses"
+        verbose_name = "Статус"
+        verbose_name_plural = "Статусы"
 
     def __str__(self):
         return self.name_status
@@ -19,8 +19,8 @@ class Type(models.Model):
     type_operation = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = "Type"
-        verbose_name_plural = "Types"
+        verbose_name = "Тип"
+        verbose_name_plural = "Типы"
 
     def __str__(self):
         return self.type_operation
@@ -30,8 +30,8 @@ class Categories(models.Model):
     categories = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
 
     def __str__(self):
         return self.categories
@@ -42,8 +42,8 @@ class SubCategories(models.Model):
     subcategories = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = "SubCategory"
-        verbose_name_plural = "SubCategories"
+        verbose_name = "Подкатегория"
+        verbose_name_plural = "Подкатегории"
 
     def __str__(self):
         return self.subcategories
@@ -52,7 +52,7 @@ class SubCategories(models.Model):
 class Transaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           editable=False)
-    title = models.CharField(max_length=255, verbose_name="Enter about transaction")
+    title = models.CharField(max_length=255, verbose_name="Название транзакции")
     date = models.DateTimeField(default=timezone.now,
                                 verbose_name='Дата и время')  # фиксация момента времени совершения транзакции
     status = models.ForeignKey('Status', on_delete=models.RESTRICT, verbose_name='Статус')
@@ -61,12 +61,11 @@ class Transaction(models.Model):
     subcategories = models.ForeignKey('SubCategories', on_delete=models.RESTRICT, verbose_name='Подкатегория')
     amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Сумма")
     comment = models.TextField(
-        max_length=1000, help_text="Enter about transaction",
+        max_length=1000,
         blank=True, verbose_name='Комментарий')
 
     def __str__(self):
-        return (f"Transaction: {self.title}, date: {self.date}, status: {self.status}"
-                f", type: {self.operation_type}, categories: {self.categories}, {self.amount}")
+        return self.title
 
     def get_absolute_url(self):
         return reverse('transaction-details', args=[str(self.id)])
