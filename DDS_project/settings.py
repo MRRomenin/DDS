@@ -61,7 +61,7 @@ ROOT_URLCONF = 'DDS_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'cashflow/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
