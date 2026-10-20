@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Status, Type, Categories, SubCategories, Transaction
+from django.core.cache import cache
 import requests
 import xmltodict
 
@@ -15,17 +16,24 @@ def search_valute(valute: str, data: dict) -> str:
 
 
 def get_valute() -> dict | str:
+    rates = cache.get('cbr_rates')
+    if rates is not None:
+        return rates
+
     try:
+        logger.info("Запрос к ЦБ")
         response = requests.get(CB_URL, timeout=10)
         response.raise_for_status()
         data = xmltodict.parse(response.content)
         rub_rate = data['ValCurs']['Valute']
 
-        return {
+        rates = {
             "dollar": search_valute('Доллар США', rub_rate),
             "euro": search_valute('Евро', rub_rate),
             "yuan": search_valute('Юань', rub_rate)
         }
+        cache.set('cbr_rates', rates, 60 * 60)
+        return rates
 
     except (requests.RequestException, KeyError) as e:
         return {"error": "Не удалось получить курсы валют"}

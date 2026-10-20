@@ -56,6 +56,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "cbr-rates",
+    }
+}
+
 ROOT_URLCONF = 'DDS_project.urls'
 
 TEMPLATES = [
