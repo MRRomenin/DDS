@@ -1,0 +1,18 @@
+{% block content %}
+
+<div class="container my-4">
+    <h3 class="mb-3">Курсы валют ЦБ РФ</h3>
+    <div class="row g-3">
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm rounded-4 p-3 text-center">{{ dollar }}</div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm rounded-4 p-3 text-center">{{ euro }}</div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm rounded-4 p-3 text-center">{{ yuan }}</div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
