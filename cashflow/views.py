@@ -7,12 +7,15 @@ import xmltodict
 CB_URL = "http://www.cbr.ru/scripts/XML_daily.asp"
 
 
-def search_valute(valute: str, data: dict) -> str:
+def search_valute(valute: str, data: dict) -> tuple | str:
     target_dict = next((d for d in data if d.get('Name') == valute), None)
     if target_dict is None:
         return f"{valute}: валюта не найдена"
 
     return f"{valute}: {target_dict['Value']}"
+    valute_decimal = Decimal(target_dict['Value'].replace(',', '.')).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    valute_info = (valute, valute_decimal)
+    return valute_info
 
 
 def get_valute() -> dict | str:
@@ -36,7 +39,7 @@ def get_valute() -> dict | str:
         return rates
 
     except (requests.RequestException, KeyError) as e:
-        return {"error": "Не удалось получить курсы валют"}
+        return {"error": f"Не удалось получить курсы валют {e}"}
 
 
 def list_transaction(request):
