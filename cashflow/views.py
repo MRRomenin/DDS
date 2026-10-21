@@ -48,3 +48,9 @@ def list_transaction(request):
     }
 
     return render(request, 'transaction/list.html', context=context)
+
+def delete_transaction(request, part_id=None):
+    my_object = Transaction.objects.get(id=part_id)
+    logger.info(f"[INFO] ID транзакции: {my_object.id}")
+    my_object.delete()
+    return redirect('list')

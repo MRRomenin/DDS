@@ -22,6 +22,7 @@
                         <th scope="col" class="py-3">Подкатегория</th>
                         <th scope="col" class="py-3 text-end">Сумма</th>
                         <th scope="col" class="py-3 pe-4">Комментарий</th>
+                        <th scope="col" class="py-3 pe-4">Удалить</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,20 +39,23 @@
                         <td><span class="text-muted small">{{ transact.subcategories }}</span></td>
 
                         <td class="text-end fw-bold text-dark font-monospace">
-                            {{ transact.amount }} ₽
+                            {{ transact.amount }} &#8381;
                         </td>
 
                         <td class="pe-4 text-muted text-wrap text-break" style="max-width: 200px;">
                             {{ transact.comment }}
                         </td>
+                        <td class="pe-4 text-muted text-wrap text-break">
+                            <form action="{% url 'delete_part' transact.id %}" onsubmit="return confirm('Вы уверены?');">
+                                <button type="submit">Удалить транзакцию </button>
+                            </form>
+                        </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">
+                        <td colspan="9" class="text-center py-5 text-muted">
                             <div class="py-3">
                                 <p class="mb-1 fw-medium">Список транзакций пока пуст</p>
-                                <p class="text-secondary small mb-0">Добавьте первую операцию через панель
-                                    управления</p>
                             </div>
                         </td>
                     </tr>
