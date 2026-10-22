@@ -1,20 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Status, Type, Categories, SubCategories, Transaction
 from django.core.cache import cache
 import requests
 import xmltodict
+from decimal import Decimal, ROUND_HALF_UP
+import logging
 
 CB_URL = "http://www.cbr.ru/scripts/XML_daily.asp"
 
 
-def search_valute(valute: str, data: dict) -> tuple | str:
+def search_valute(valute: str, data: dict, symbol: str) -> dict | str:
     target_dict = next((d for d in data if d.get('Name') == valute), None)
     if target_dict is None:
         return f"{valute}: валюта не найдена"
-
-    return f"{valute}: {target_dict['Value']}"
     valute_decimal = Decimal(target_dict['Value'].replace(',', '.')).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    valute_info = (valute, valute_decimal)
+    valute_info = {'name': valute, 'valute': valute_decimal, 'symbol': symbol}
     return valute_info
 
 
@@ -31,9 +31,9 @@ def get_valute() -> dict | str:
         rub_rate = data['ValCurs']['Valute']
 
         rates = {
-            "dollar": search_valute('Доллар США', rub_rate),
-            "euro": search_valute('Евро', rub_rate),
-            "yuan": search_valute('Юань', rub_rate)
+            "dollar": search_valute('Доллар США', rub_rate, '$'),
+            "euro": search_valute('Евро', rub_rate, '€'),
+            "yuan": search_valute('Юань', rub_rate, '¥')
         }
         cache.set('cbr_rates', rates, 60 * 60)
         return rates
@@ -47,7 +47,7 @@ def list_transaction(request):
 
     context = {
         'transacts': transact,
-        **get_valute(),
+        'rates': get_valute(),
     }
 
     return render(request, 'transaction/list.html', context=context)
