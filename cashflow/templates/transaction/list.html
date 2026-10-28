@@ -9,63 +9,76 @@
         <button type="submit" class="btn btn-success">Добавить транзакцию</button>
     </form>
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
         <div class="card-header bg-white py-3 px-4 border-0 d-flex justify-content-between align-items-center">
             <h5 class="mb-0 fw-bold text-dark">История транзакций</h5>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
+
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-uppercase fs-7 text-muted tracking-wide">
-                    <tr>
-                        <th scope="col" class="py-3 ps-4">Дата</th>
-                        <th scope="col" class="py-3">Статус</th>
-                        <th scope="col" class="py-3">Тип</th>
-                        <th scope="col" class="py-3">Категория</th>
-                        <th scope="col" class="py-3">Подкатегория</th>
-                        <th scope="col" class="py-3 text-end">Сумма</th>
-                        <th scope="col" class="py-3 pe-4">Комментарий</th>
-                        <th scope="col" class="py-3 pe-4">Удалить</th>
-                    </tr>
+                        <tr>
+                            <th scope="col" class="py-3 ps-4">Дата</th>
+                            <th scope="col" class="py-3">Статус</th>
+                            <th scope="col" class="py-3">Тип</th>
+                            <th scope="col" class="py-3">Категория</th>
+                            <th scope="col" class="py-3">Подкатегория</th>
+                            <th scope="col" class="py-3 text-end">Сумма</th>
+                            <th scope="col" class="py-3 pe-4">Комментарий</th>
+                            <th scope="col" class="py-3 pe-4"></th>
+                            <th scope="col" class="py-3 pe-4"></th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {% for transact in transacts %}
-                    <tr>
-                        <td class="ps-4 fw-medium text-dark">{{ transact.date|date:"d.m.Y" }}</td>
-                        <td>
-                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1">
-                  {{ transact.status }}
-                </span>
-                        </td>
-                        <td><span class="text-secondary">{{ transact.operation_type }}</span></td>
-                        <td><span class="fw-medium text-dark">{{ transact.categories }}</span></td>
-                        <td><span class="text-muted small">{{ transact.subcategories }}</span></td>
+                        {% for transact in transacts %}
+                        <tr>
+                            <td class="ps-4 fw-medium text-dark">{{ transact.date|date:"d.m.Y" }}</td>
+                            <td>
+                                <span
+                                    class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1">
+                                    {{ transact.status }}
+                                </span>
+                            </td>
+                            <td><span class="text-secondary">{{ transact.operation_type }}</span></td>
+                            <td><span class="fw-medium text-dark">{{ transact.categories }}</span></td>
+                            <td><span class="text-muted small">{{ transact.subcategories }}</span></td>
 
-                        <td class="text-end fw-bold text-dark font-monospace">
-                            {{ transact.amount }} &#8381;
-                        </td>
+                            <td class="text-end fw-bold text-dark font-monospace">
+                                {{ transact.amount }} &#8381;
+                            </td>
 
-                        <td class="pe-4 text-muted text-wrap text-break" style="max-width: 200px;">
-                            {{ transact.comment }}
-                        </td>
-                        <td class="pe-4 text-muted text-wrap text-break">
-                            <form action="{% url 'delete_part' transact.id %}" onsubmit="return confirm('Вы уверены?');">
-                                <button type="submit">Удалить транзакцию </button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="9" class="text-center py-5 text-muted">
-                            <div class="py-3">
-                                <p class="mb-1 fw-medium">Список транзакций пока пуст</p>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                            <td class="pe-4 text-muted text-wrap text-break" style="max-width: 200px;">
+                                {{ transact.comment }}
+                            </td>
+                            <td class="pe-4 text-muted text-wrap text-break">
+                                <form method="POST" action="{% url 'delete_part' transact.id %}"
+                                    onsubmit="return confirm('Вы уверены?');">
+                                      {% csrf_token %}
+
+                                    <button type="submit" class="btn btn-danger">Удалить транзакцию</button>
+                                </form>
+                            </td>
+                            <td class="pe-4 text-muted text-wrap text-break">
+                                <form action="" onsubmit="return confirm('Редактировать?');">
+                                    <button type="submit" class="btn btn-light">Редактировать &#10000;</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" class="text-center py-5 text-muted">
+                                <div class="py-3">
+                                    <p class="mb-1 fw-medium">Список транзакций пока пуст</p>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    {% endblock %}
-</div>>
+</div>
+{% endblock %}
