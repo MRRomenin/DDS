@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container my-4" style="max-width: 600px;">
+    <h1 class="mb-3">Добавление транзакции</h1>
+
+    <a href="{% url 'list' %}" class="btn btn-outline-secondary mb-4">Назад</a>
+
+    {# Одна форма на все поля. Кнопка отправки лежит внутри неё. #}
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form action="{% url 'add_transaction' %}" method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="name_transaction" class="form-label">Название транзакции</label>
+            <input type="text" class="form-control" id="name_transaction" name="name_transaction"
+                   maxlength="100" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label">Статус</label>
+            <div class="input-group">
+                <select class="form-select" id="status" name="status_object" required>
+                    <option value="">-- Сделайте выбор --</option>
+                    {% for obj in status_object %}
+                    <option value="{{ obj.pk }}">{{ obj }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" class="btn btn-outline-secondary" title="Добавить статус">+</button>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="type" class="form-label">Тип</label>
+            <div class="input-group">
+                <select class="form-select" id="type" name="type_object" required>
+                    <option value="">-- Сделайте выбор --</option>
+                    {% for obj in type_objects %}
+                    <option value="{{ obj.pk }}">{{ obj }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" class="btn btn-outline-secondary" title="Добавить тип">+</button>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Категория</label>
+            <div class="input-group">
+                <select class="form-select" id="category" name="category_object" required>
+                    <option value="">-- Сделайте выбор --</option>
+                    {% for obj in category_object %}
+                    <option value="{{ obj.pk }}">{{ obj }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" class="btn btn-outline-secondary" title="Добавить категорию">+</button>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="subcategory" class="form-label">Подкатегория</label>
+            <div class="input-group">
+                {# name исправлен: раньше был type_object, как у поля "Тип" #}
+                <select class="form-select" id="subcategory" name="subcategory_object" required>
+                    <option value="">-- Сделайте выбор --</option>
+                    {% for obj in subcategory_object %}
+                    <option value="{{ obj.pk }}">{{ obj }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" class="btn btn-outline-secondary" title="Добавить подкатегорию">+</button>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="amount" class="form-label">Сумма</label>
+            {# type="number" со step позволяет копейки; pattern="[0-9]*" их запрещал #}
+            <input type="number" class="form-control" id="amount" name="amount"
+                   step="0.01" min="0.01" placeholder="Например, 1500.50" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="comment" class="form-label">Комментарий</label>
+            <textarea class="form-control" id="comment" name="comment" rows="5" maxlength="255"
+                      placeholder="Напишите комментарий..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+</div>
+
+{% endblock %}
