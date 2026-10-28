@@ -3,8 +3,9 @@ from .models import Status, Type, Categories, SubCategories, Transaction
 from django.core.cache import cache
 import requests
 import xmltodict
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 import logging
+from django.shortcuts import get_object_or_404
 
 CB_URL = "http://www.cbr.ru/scripts/XML_daily.asp"
 
@@ -57,3 +58,49 @@ def delete_transaction(request, part_id=None):
     logger.info(f"[INFO] ID транзакции: {my_object.id}")
     my_object.delete()
     return redirect('list')
+def transaction_objects():
+    status_object = Status.objects.all()
+    type_object = Type.objects.all()
+    category_object = Categories.objects.all()
+    subcategory_object = SubCategories.objects.all()
+    context = {
+        'status_object': status_object,
+        'type_objects': type_object,
+        'category_object': category_object,
+        'subcategory_object': subcategory_object,
+    }
+
+    return context
+
+
+def add_transaction(request):
+    if request.method == 'POST':
+        status = get_object_or_404(Status, pk=request.POST.get('status_object'))
+        operation_type = get_object_or_404(Type, pk=request.POST.get('type_object'))
+        categories = get_object_or_404(Categories, pk=request.POST.get('category_object'))
+        subcategories = get_object_or_404(SubCategories, pk=request.POST.get('subcategory_object'))
+        error = None
+        amount = None
+
+        try:
+            amount = Decimal(request.POST.get('amount', '').strip().replace(',', '.'))
+
+        except InvalidOperation:
+            error = 'Введите число'
+
+        if error is None and not (amount.is_finite() and amount > 0):
+            error = 'Сумма должна быть больше нуля'
+
+        if error:
+            context = transaction_objects()
+            context['error'] = error
+            return render(request, 'transaction/from_transact.html', context=context)
+
+        result = Transaction.objects.create(title=request.POST.get('name_transaction'), status=status,
+                                   operation_type=operation_type, categories=categories,
+                                   subcategories=subcategories, amount=amount,
+                                   comment=request.POST.get('comment'))
+
+        return redirect('list')
+
+    return render(request, 'transaction/from_transact.html', context=transaction_objects())
