@@ -43,9 +43,12 @@ def get_valute() -> dict | str:
         return {"error": f"Не удалось получить курсы валют {e}"}
 
 
-def list_transaction(request):
-    transact = Transaction.objects.all()
+def list_transaction(request, part_id=None):
+    if request.method == 'POST':
+        delete_transaction(Transaction.objects.get(id=part_id))
+        return redirect('list')
 
+    transact = Transaction.objects.all()
     context = {
         'transacts': transact,
         'rates': get_valute(),
@@ -53,11 +56,11 @@ def list_transaction(request):
 
     return render(request, 'transaction/list.html', context=context)
 
-def delete_transaction(request, part_id=None):
-    my_object = Transaction.objects.get(id=part_id)
-    logger.info(f"[INFO] ID транзакции: {my_object.id}")
-    my_object.delete()
-    return redirect('list')
+
+def delete_transaction(response_object: Transaction):
+    response_object.delete()
+
+
 def transaction_objects():
     status_object = Status.objects.all()
     type_object = Type.objects.all()
