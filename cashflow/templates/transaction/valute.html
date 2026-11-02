@@ -5,10 +5,12 @@
     <div class="row g-3">
 
         {% for item in rates.values %}
-            <div class="col-12 col-md-4">
-                <div class="card shadow-sm rounded-4 p-3 text-center">{{ item.name }} {{ item.valute|floatformat:2 }} {{ item.symbol }}
-                    </div>
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm rounded-4 p-3 text-center custom-element">{{ item.name }}:
+                {{ item.valute|floatformat:2 }}
+                {{ item.symbol }}
             </div>
+        </div>
 
         {% endfor %}
     </div>

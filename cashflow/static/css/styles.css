@@ -1,0 +1,24 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+}
+
+.custom-element {
+  background-color: #fff; /* Исходный цвет Bootstrap primary */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Плавность для фона и текста */
+}
+
+.custom-element:hover {
+  background-color: rgba(0,0,0, 0.075); /* Новый цвет при наведении (например, зеленый) */
+  color: #0a0000;
+}
