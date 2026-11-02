@@ -76,8 +76,9 @@ class Transaction(models.Model):
         ordering = ['-date']
         constraints = [
             models.CheckConstraint(
-                condition=models.Q(amount__gte=0),
-                name='amount_gte_zero'
+                condition=models.Q(amount__gt=0),
+                name='amount_gte_zero',
+                violation_error_message='Сумма должна быть больше нуля'
             )
         ]
 
