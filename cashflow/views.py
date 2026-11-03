@@ -90,4 +90,10 @@ def add_transaction(request):
     else:
         form = FormTransaction()
 
-    return render(request, 'transaction/from_transact.html', {'form': form})
+    context = {
+        'form': form,
+        'title': "Добавление транзакции",
+        'text_button': "Отправить",
+    }
+
+    return render(request, 'transaction/from_transact.html', context=context)
