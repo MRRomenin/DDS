@@ -5,7 +5,6 @@ import requests
 import xmltodict
 from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 import logging
-from .forms import FormAddTransaction
 # from django.shortcuts import get_object_or_404
 from .forms import FormTransaction
 
