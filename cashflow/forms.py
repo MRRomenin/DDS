@@ -3,7 +3,7 @@ from django import forms
 from .models import Status, Type, Categories, SubCategories, Transaction
 
 
-class FormAddTransaction(forms.ModelForm):
+class FormTransaction(forms.ModelForm):
     class Meta:
         model = Transaction
         fields = ('title', 'status', 'operation_type', 'categories',
