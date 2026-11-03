@@ -1,11 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Status, Type, Categories, SubCategories, Transaction
 from django.core.cache import cache
 import requests
 import xmltodict
 from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 import logging
-# from django.shortcuts import get_object_or_404
 from .forms import FormTransaction
 
 
@@ -60,6 +59,25 @@ def list_transaction(request, part_id=None):
 
 def delete_transaction(response_object: Transaction):
     response_object.delete()
+
+def edit_transaction(request, part_id=None):
+    post = get_object_or_404(Transaction, pk=part_id)
+    if request.method == 'POST':
+        form = FormTransaction(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('list')
+    else:
+        form = FormTransaction(instance=post)
+
+    context = {
+        'form': form,
+        'title': "Редактирование транзакции",
+        'text_button': "Редактировать",
+
+    }
+
+    return render(request, 'transaction/from_transact.html', context=context)
 
 
 def add_transaction(request):

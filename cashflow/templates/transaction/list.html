@@ -60,7 +60,7 @@
                                 </form>
                             </td>
                             <td class="pe-4 text-muted text-wrap text-break">
-                                <form action="" onsubmit="return confirm('Редактировать?');">
+                                <form action="{% url 'edit_part' transact.id %}" onsubmit="return confirm('Редактировать?');" method="GET">
                                     <button type="submit" class="btn btn-light">Редактировать &#10000;</button>
                                 </form>
                             </td>

@@ -9,10 +9,10 @@
 
 
     {% if error %}
-    <div class="alert alert-danger">{{ error }}</div>
+        <div class="alert alert-danger">{{ error }}</div>
     {% endif %}
     {{ form.non_field_errors }}
-    <form action="{% url 'add_transaction' %}" method="POST">
+    <form method="POST">
         {% csrf_token %}
         {% for field in form %}
         <div class="mb-3">
