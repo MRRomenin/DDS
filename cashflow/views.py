@@ -4,7 +4,6 @@ from django.core.cache import cache
 import requests
 import xmltodict
 from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
-import logging
 from .forms import FormTransaction
 
 
@@ -26,7 +25,6 @@ def get_valute() -> dict | str:
         return rates
 
     try:
-        logger.info("Запрос к ЦБ")
         response = requests.get(CB_URL, timeout=10)
         response.raise_for_status()
         data = xmltodict.parse(response.content)
