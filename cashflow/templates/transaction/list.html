@@ -53,7 +53,7 @@
                             </td>
                             <td class="pe-4 text-muted text-wrap text-break">
                                 <form method="POST" action="{% url 'delete_part' transact.id %}"
-                                    onsubmit="return confirm('Вы уверены?');">
+                                    onsubmit="return confirm('Вы хотите удалить транзакцию?');">
                                       {% csrf_token %}
 
                                     <button type="submit" class="btn btn-danger">Удалить транзакцию</button>
