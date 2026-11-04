@@ -5,7 +5,7 @@ import uuid
 
 
 class Status(models.Model):
-    name_status = models.CharField(max_length=100)
+    name_status = models.CharField(max_length=100, verbose_name='Статус')
 
     class Meta:
         verbose_name = "Статус"
@@ -16,7 +16,7 @@ class Status(models.Model):
 
 
 class Type(models.Model):
-    type_operation = models.CharField(max_length=100)
+    type_operation = models.CharField(max_length=100, verbose_name='Тип')
 
     class Meta:
         verbose_name = "Тип"
@@ -27,7 +27,7 @@ class Type(models.Model):
 
 
 class Categories(models.Model):
-    categories = models.CharField(max_length=100)
+    categories = models.CharField(max_length=100, verbose_name='Категория')
 
     class Meta:
         verbose_name = "Категория"
@@ -38,7 +38,7 @@ class Categories(models.Model):
 
 
 class SubCategories(models.Model):
-    category = models.ForeignKey('Categories', on_delete=models.CASCADE)
+    category = models.ForeignKey('Categories', on_delete=models.CASCADE, verbose_name='Подкатегории')
     subcategories = models.CharField(max_length=100)
 
     class Meta:
