@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4" style="max-width: 1000px;">
+
+    <h1 class="mb-2">{{ title }}</h1>
+    <p class="text-muted mb-4">
+        Справочная информация об статусах, типах, категориях и подкатегориях
+    </p>
+
+    <a href="{% url 'list' %}" class="btn btn-outline-secondary mb-4">
+        Назад
+    </a>
+    <form method="POST" action="{% url 'delete_mass' %}">
+        <button class="btn btn-danger mb-4">
+            Удалить выбранные
+        </button>
+        <div class="row row-cols-1 row-cols-md-2 g-3">
+
+            <div class="col">
+                <div class="card h-100">
+
+                    <div class="card-header bg-light fw-semibold">
+                        Статусы
+                    </div>
+
+                    <div class="card-body m-2">
+
+                        {% for status in statuses %}
+                        <div class="m-1">
+                            {% csrf_token %}
+
+                            <label>
+                                <input type="checkbox" name="selected_items" value="{{ status.pk }}">
+                                {{ status }}
+
+                            </label>
+                        </div>
+                        {% empty %}
+                        <div class="text-muted">Нет доступных статусов</div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-header bg-light fw-semibold">
+                        Типы
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            {% for type in types %}
+                            <li class="mb-2">{{ type }}</li>
+                            {% empty %}
+                            <li class="text-muted">Нет доступных типов</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-header bg-light fw-semibold">
+                        Категории
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            {% for category in categories %}
+                            <li class="mb-2">{{ category.categories }}</li>
+                            {% empty %}
+                            <li class="text-muted">Нет доступных категорий</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-header bg-light fw-semibold">
+                        Подкатегории
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            {% for subcategory in subcategories %}
+                            <li class="mb-2">{{ subcategory.subcategories }}</li>
+                            {% empty %}
+                            <li class="text-muted">Нет доступных подкатегорий</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+{% endblock %}

@@ -80,6 +80,31 @@ def edit_transaction(request, part_id=None):
     return render(request, 'transaction/from_transact.html', context=context)
 
 
+def display_directory(request):
+    status = Status.objects.all()
+    types = Type.objects.all()
+    category = Categories.objects.all()
+    subcategory = SubCategories.objects.all()
+
+    context = {
+        'statuses': status,
+        'types': types,
+        'categories': category,
+        'subcategories': subcategory,
+        'title': "Справочник",
+    }
+
+    return render(request, 'transaction/directory.html', context=context)
+
+def display_status_delete(request):
+    if request.method == 'POST':
+        selected_directory = request.POST.getlist('selected_items')
+        logger.info(f"transactions: {selected_directory}")
+        if selected_directory:
+            Status.objects.filter(pk__in=selected_directory).delete()
+
+    return redirect('directory')
+
 def add_transaction(request):
     if request.method == 'POST':
         form = FormTransaction(request.POST)
