@@ -5,10 +5,21 @@ import requests
 import xmltodict
 from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 import logging
-from .forms import FormTransaction
+from .forms import FormTransaction, FormStatus
+from django.db.models import ProtectedError, RestrictedError
+from django.contrib import messages
+from django.http import Http404
 
 
 CB_URL = "http://www.cbr.ru/scripts/XML_daily.asp"
+
+
+DIRECTORY_TRANSACTION = {
+    'statuses': Status,
+    'types': Type,
+    'categories': Categories,
+    'subcategories': SubCategories,
+}
 
 
 def search_valute(valute: str, data: dict, symbol: str) -> dict | str:
@@ -102,8 +113,30 @@ def display_status_delete(request):
         logger.info(f"transactions: {selected_directory}")
         if selected_directory:
             Status.objects.filter(pk__in=selected_directory).delete()
+def delete_directory(request, directory):
+    model = DIRECTORY_TRANSACTION.get(directory)
+    if model is None:
+        raise Http404
 
-    return redirect('directory')
+    try:
+        if request.method == 'POST':
+            selected_directory = request.POST.getlist('selected_items')
+            logger.info(f"[INFO] selected_directory: {selected_directory}")
+            if selected_directory:
+                model.objects.filter(pk__in=selected_directory).delete()
+            else:
+                messages.info(
+                    request,
+                    "Вы ничего не выбрали"
+                )
+            return redirect('directory')
+
+    except RestrictedError as e:
+        messages.error(
+            request,
+            f"Невозможно удалить объект, так как ссылается на другие данные {len(e.restricted_objects)}"
+        )
+        return redirect('directory')
 
 def add_transaction(request):
     if request.method == 'POST':
