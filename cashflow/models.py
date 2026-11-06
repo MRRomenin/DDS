@@ -38,8 +38,8 @@ class Categories(models.Model):
 
 
 class SubCategories(models.Model):
-    category = models.ForeignKey('Categories', on_delete=models.CASCADE, verbose_name='Подкатегории')
-    subcategories = models.CharField(max_length=100)
+    category = models.ForeignKey('Categories', on_delete=models.CASCADE, verbose_name='Категория')
+    subcategories = models.CharField(max_length=100, verbose_name='Подкатегории')
 
     class Meta:
         verbose_name = "Подкатегория"
