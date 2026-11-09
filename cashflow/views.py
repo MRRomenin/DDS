@@ -115,12 +115,6 @@ def display_directory(request):
 
     return render(request, 'transaction/directory.html', context=context)
 
-def display_status_delete(request):
-    if request.method == 'POST':
-        selected_directory = request.POST.getlist('selected_items')
-        logger.info(f"transactions: {selected_directory}")
-        if selected_directory:
-            Status.objects.filter(pk__in=selected_directory).delete()
 def delete_directory(request, directory):
     model = DIRECTORY_TRANSACTION.get(directory)
     if model is None:
