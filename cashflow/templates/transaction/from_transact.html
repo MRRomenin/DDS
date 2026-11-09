@@ -3,6 +3,8 @@
 {% block content %}
 
 <div class="container my-4" style="max-width: 600px;">
+        {% load static %}
+
     <h1 class="mb-3">{{ title }}</h1>
 
 
@@ -36,4 +38,10 @@
     </form>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+    {% if method == 'list' %}
+        <script src="{% static 'js/scripts.js' %}"></script>
+    {% endif %}
 {% endblock %}
