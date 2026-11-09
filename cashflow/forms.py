@@ -25,6 +25,13 @@ class FormTransaction(forms.ModelForm):
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'id': "comment", 'name': "comment"}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['status'].empty_label = 'Выберите статус'
+        self.fields['operation_type'].empty_label = 'Выберите тип'
+        self.fields['categories'].empty_label = 'Выберите категорию'
+        self.fields['subcategories'].empty_label = 'Выберите подкатегорию'
+
     def clean_amount(self):
         amount = self.cleaned_data['amount']
         if not amount > 0:
@@ -60,6 +67,10 @@ class FormCategories(forms.ModelForm):
 
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['type'].empty_label = 'Выберите тип'
+
 
 class FormSubCategories(forms.ModelForm):
     class Meta:
@@ -69,6 +80,10 @@ class FormSubCategories(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-select'}),
             'subcategories': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].empty_label = 'Выберите тип'
 
 
 class FormDate(forms.Form):
