@@ -11,65 +11,37 @@
     <a href="{% url 'list' %}" class="btn btn-outline-secondary mb-4">
         Назад
     </a>
-            {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
+    <a href="{% url 'add_transaction' %}" class="btn btn-secondary mb-4">Добавить транзакцию</a>
 
-        <div class="row row-cols-1 row-cols-md-2 g-3">
-            <div class="col">
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
-                <div class="card h-100">
+    <div class="row row-cols-1 row-cols-md-2 g-3">
+        <div class="col">
+            {% include 'transaction/call_directory.html' with title="Статусы" items=statuses url_key="statuses" url_obj="obj_status" empty_text="Нет доступных статусов"%}
+        </div>
 
-                    <div class="card-header bg-light fw-semibold">
-                        Статусы
-                    </div>
+        <div class="col">
+            {% include 'transaction/call_directory.html' with title="Типы" items=types url_key="types" url_obj="obj_type" empty_text="Нет доступных типов" %}
+        </div>
 
-                    <div class="card-body">
-                        {% include 'transaction/call_directory.html' with title="Статусы" items=statuses url_key="statuses" empty_text="Нет доступных статусов" %}
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-header bg-light fw-semibold">
-                        Типы
-                    </div>
-                    <div class="card-body">
-                        {% include 'transaction/call_directory.html' with title="Типы" items=types url_key="types" empty_text="Нет доступных типов" %}
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-header bg-light fw-semibold">
-                        Категории
-                    </div>
-                    <div class="card-body">
-                        {% include 'transaction/call_directory.html' with title="Категории" items=categories url_key="categories" empty_text="Нет доступных категорий" %}
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-header bg-light fw-semibold">
-                        Подкатегории
-                    </div>
-                    <div class="card-body">
-                        {% include 'transaction/call_directory.html' with title="Подкатегории" items=subcategories url_key="subcategories" empty_text="Нет доступных подкатегорий" %}
-                    </div>
-                </div>
-            </div>
+        <div class="col">
+            {% include 'transaction/call_directory.html' with title="Категории" items=categories url_key="categories" url_obj="obj_category" empty_text="Нет доступных категорий" %}
 
         </div>
+
+        <div class="col">
+            {% include 'transaction/call_directory.html' with title="Подкатегории" items=subcategories url_key="subcategories" url_obj="obj_subcategory" empty_text="Нет доступных подкатегорий" %}
+        </div>
+
+    </div>
 
 
 </div>

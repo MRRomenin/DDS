@@ -5,10 +5,11 @@ import requests
 import xmltodict
 from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 import logging
-from .forms import FormTransaction, FormStatus
+from .forms import FormTransaction, FormStatus, FormType, FormCategories, FormSubCategories, FormDate
 from django.db.models import ProtectedError, RestrictedError
 from django.contrib import messages
 from django.http import Http404
+from django.forms import modelformset_factory
 
 
 CB_URL = "http://www.cbr.ru/scripts/XML_daily.asp"
@@ -19,6 +20,13 @@ DIRECTORY_TRANSACTION = {
     'types': Type,
     'categories': Categories,
     'subcategories': SubCategories,
+}
+
+DICT_OBJECTS_FORM = {
+    'obj_status': FormStatus,
+    'obj_type': FormType,
+    'obj_category': FormCategories,
+    'obj_subcategory': FormSubCategories,
 }
 
 
@@ -137,6 +145,56 @@ def delete_directory(request, directory):
             f"Невозможно удалить объект, так как ссылается на другие данные {len(e.restricted_objects)}"
         )
         return redirect('directory')
+
+def add_directory(request, method_object):
+    model = DICT_OBJECTS_FORM.get(method_object)
+
+    if request.method == 'POST':
+        form_directory = model(request.POST)
+        form_directory.save()
+        return redirect('directory')
+    else:
+        form_directory = model()
+
+    context = {
+        'form': form_directory,
+        'title': "Добавление элемента в директорию",
+        'method': 'directory',
+        'text_button': "Отправить",
+    }
+
+    return render(request, 'transaction/from_transact.html', context=context)
+
+def edit_directory(request, method_object, select_edit):
+    model_entities = DIRECTORY_TRANSACTION.get(method_object)
+    model_form = DICT_OBJECTS_FORM.get(select_edit)
+
+    if model_form | model_entities is None:
+        return Http404
+
+    ModelFormSet = modelformset_factory(model_entities, form=model_form, extra=0)
+    selected_directory = request.GET.getlist('selected_items')
+    queryset = model_entities.objects.filter(pk__in=selected_directory)
+
+    if request.method == 'POST':
+
+        form_edit = ModelFormSet(request.POST, queryset=queryset)
+
+        if form_edit.is_valid():
+            form_edit.save()
+            return redirect('directory')
+
+    else:
+        form_edit = ModelFormSet(queryset=queryset)
+
+    context = {
+        'formset': form_edit,
+        'title': "Редактирование справочника",
+        'text_button': "Редактировать",
+    }
+
+    return render(request, 'transaction/edit_directory.html', context)
+
 
 def add_transaction(request):
     if request.method == 'POST':

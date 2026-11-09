@@ -8,4 +8,5 @@ urlpatterns = [
     path('directory/', views.display_directory, name='directory'),
     path('delete/<slug:directory>/', views.delete_directory, name='delete_mass'),
     path('edit/<uuid:part_id>/', views.edit_transaction, name='edit_part'),
+    path('add_directory/<slug:method_object>/', views.add_directory, name='add_directory'),
 ]
