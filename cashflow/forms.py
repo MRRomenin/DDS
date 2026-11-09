@@ -30,3 +30,54 @@ class FormTransaction(forms.ModelForm):
         if not amount > 0:
             raise forms.ValidationError('Сумма должна быть больше нуля')
         return amount
+
+
+class FormStatus(forms.ModelForm):
+    class Meta:
+        model = Status
+        fields = ('name_status',)
+        widgets = {
+            'name_status': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class FormType(forms.ModelForm):
+    class Meta:
+        model = Type
+        fields = ('type_operation',)
+        widgets = {
+            'type_operation': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class FormCategories(forms.ModelForm):
+    class Meta:
+        model = Categories
+        fields = ('categories', 'type',)
+        widgets = {
+            'categories': forms.TextInput(attrs={'class': 'form-control'}),
+            'type': forms.Select(attrs={'class': 'form-select'}),
+
+        }
+
+
+class FormSubCategories(forms.ModelForm):
+    class Meta:
+        model = SubCategories
+        fields = ('category', 'subcategories',)
+        widgets = {
+            'category': forms.Select(attrs={'class': 'form-select'}),
+            'subcategories': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class FormDate(forms.Form):
+    user_date_start = forms.DateField(required=False, label="С", widget=forms.DateInput(attrs={'type': 'date', 'id': "date_picker_start"}, format='%Y-%m-%d'))
+    user_date_end = forms.DateField(required=False, label="по", widget=forms.DateInput(attrs={'type': 'date', 'id': "date-picker_end"}, format='%Y-%m-%d'))
+    def clean(self):
+        date_start = self.cleaned_data.get('user_date_start')
+        date_end = self.cleaned_data.get('user_date_end')
+        if date_start and date_end is not None:
+            if date_start > date_end:
+                raise forms.ValidationError('date_start > date_end')
+

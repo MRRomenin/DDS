@@ -1,0 +1,43 @@
+<div class="card h-100">
+        {% load static %}
+
+    <div class="card-header bg-light fw-semibold">
+        {{ title }}
+    </div>
+    <div class="card-body">
+        <form method="POST"
+              onsubmit="return confirm('?');">
+            {% csrf_token %}
+            {% for item in items %}
+            <div class="m-1">
+
+                <label>
+                    <input type="checkbox" name="selected_items" value="{{ item.pk }}">
+                    {{ item }}
+                </label>
+            </div>
+            {% empty %}
+            <div class="text-muted">{{ empty_text }}</div>
+            {% endfor %}
+            <button type="submit" class="btn btn-danger mt-3" formaction="{% url 'delete_mass' url_key %}"
+                    {% if not items %}
+                    disabled
+                    {% endif %}>
+                Удалить
+            </button>
+            <button type="submit" class="btn btn-primary mt-3" formmethod="GET" formaction="{% url 'edit_directory' url_key url_obj %}"
+                    {% if not items %}
+                    disabled
+                    {% endif %}>
+                Редактировать
+            </button>
+
+
+        </form>
+        <a href="{% url 'add_directory' url_obj %}" type="submit" class="btn btn-success mt-3">Добавить</a>
+
+    </div>
+
+</div>
+
+

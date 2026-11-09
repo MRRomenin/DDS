@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container my-4" style="max-width: 600px;">
+    <h1 class="mb-3">{{ title }}</h1>
+
+    <a href="{% url 'directory' %}" class="btn btn-outline-secondary mb-4">Назад</a>
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {{ formset.non_form_errors }}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {% for form in formset %}
+        <div class="card mb-3">
+            <div class="card-body">
+                {{ form.id }}
+                {{ form.non_field_errors }}
+                {% for field in form.visible_fields %}
+                <div class="mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-muted mb-3">Нет записей для редактирования. Выберите запись/записи для редактирования</div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary" {% if not formset.forms %}disabled{% endif %}>
+            {{ text_button }}
+        </button>
+    </form>
+</div>
+
+{% endblock %}

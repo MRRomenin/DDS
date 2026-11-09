@@ -3,10 +3,18 @@
 {% block content %}
 
 <div class="container my-4" style="max-width: 600px;">
+        {% load static %}
+
     <h1 class="mb-3">{{ title }}</h1>
 
-    <a href="{% url 'list' %}" class="btn btn-outline-secondary mb-4">Назад</a>
 
+    {% if method == 'list' %}
+
+        <a href="{% url 'list' %}" class="btn btn-outline-secondary mb-4">Назад</a>
+        <a href="{% url 'directory' %}" class="btn btn-secondary mb-4">Справочник</a>
+    {% else %}
+        <a href="{% url 'directory' %}" class="btn btn-outline-secondary mb-4">Назад</a>
+    {% endif %}
 
     {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
@@ -18,9 +26,9 @@
         <div class="mb-3">
             {{ field.label_tag }}
         </div>
-        <div class="mb-3">
-            {{ field }}
-        </div>
+            <div class="mb-3">
+                {{ field }}
+            </div>
         <div class="mb-3">
             {{ field.errors }}
         </div>
@@ -30,4 +38,10 @@
     </form>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+    {% if method == 'list' %}
+        <script src="{% static 'js/scripts.js' %}"></script>
+    {% endif %}
 {% endblock %}

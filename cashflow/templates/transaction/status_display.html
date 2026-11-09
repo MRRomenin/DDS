@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container my-4" style="max-width: 600px;">
+    <h1 class="mb-3">Status</h1>
+
+    <a href="{% url 'list' %}" class="btn btn-outline-secondary mb-4">Назад</a>
+
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    {{ form.non_field_errors }}
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-3">
+            {{ field.label_tag }}
+        </div>
+
+        {% if field.name in plus_field %}
+            <div class="input-group">
+                {{ field }}
+            </div>
+        {% else %}
+            <div class="mb-3">
+                {{ field }}
+            </div>
+        {% endif %}
+
+
+        <div class="mb-3">
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+
+        <button type="submit" id="button_send" class="btn btn-primary">{{ text_button }}</button>
+    </form>
+</div>
+
+{% endblock %}
