@@ -27,6 +27,7 @@ class Type(models.Model):
 
 
 class Categories(models.Model):
+    type = models.ForeignKey('Type', on_delete=models.CASCADE, verbose_name='Тип', default=1)
     categories = models.CharField(max_length=100, verbose_name='Категория')
 
     class Meta:
