@@ -69,9 +69,28 @@ def list_transaction(request, part_id=None):
         return redirect('list')
 
     transact = Transaction.objects.all()
+    form_date = FormDate(request.GET)
+    if form_date.is_valid():
+
+        start_date = form_date.cleaned_data.get('user_date_start')
+        end_date = form_date.cleaned_data.get('user_date_end')
+
+
+        if start_date:
+            transact = transact.filter(date__date__gte=start_date)
+        if end_date:
+            transact = transact.filter(date__date__lte=end_date)
+
+    elif form_date.is_bound:
+        transact = Transaction.objects.none()
+        logger.info("start_date: %s", transact)
+
+
     context = {
         'transacts': transact,
         'rates': get_valute(),
+        'reset_filter': transact,
+        'date_form': form_date,
     }
     return render(request, 'transaction/list.html', context=context)
 
@@ -93,7 +112,7 @@ def edit_transaction(request, part_id=None):
         'form': form,
         'title': "Редактирование транзакции",
         'text_button': "Редактировать",
-
+        'method': 'list',
     }
 
     return render(request, 'transaction/from_transact.html', context=context)
@@ -204,6 +223,7 @@ def add_transaction(request):
         'form': form,
         'title': "Добавление транзакции",
         'text_button': "Отправить",
+        'method': 'list',
     }
 
     return render(request, 'transaction/from_transact.html', context=context)
