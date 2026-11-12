@@ -36,6 +36,7 @@
                 <button type="submit" class="btn btn-secondary">Справочник</button>
             </form>
         </div>
+        <input type="text" id="InputSearch" class="rounded-4" placeholder="Поиск по названию транзакции..">
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
@@ -46,7 +47,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
 
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0" id="table_transaction">
                     <thead class="table-light text-uppercase fs-10 text-muted tracking-wide">
                         <tr>
                             <th scope="col" class="py-3 ps-4">Дата</th>
@@ -65,7 +66,7 @@
                         {% for transact in transacts %}
                         <tr>
                             <td class="ps-4 fw-medium text-dark">{{ transact.date|date:"d.m.Y" }}</td>
-                            <td><span class="fw-medium text-dark">{{ transact.title }}</span></td>
+                            <td id="title_transaction"><span class="fw-medium text-dark">{{ transact.title }}</span></td>
                             <td>
                                 <span
                                     class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1">
@@ -125,6 +126,6 @@
 {% endblock %}
 {% block scripts %}
     <script src="{% static 'js/filter.js' %}" defer></script>
-
+    <script src="{% static 'js/search_name.js' %}" defer></script>
 
 {% endblock %}
