@@ -45,7 +45,6 @@ def get_valute() -> dict | str:
         return rates
 
     try:
-        logger.info("Запрос к ЦБ")
         response = requests.get(CB_URL, timeout=10)
         response.raise_for_status()
         data = xmltodict.parse(response.content)
