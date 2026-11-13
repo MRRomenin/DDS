@@ -90,6 +90,7 @@ def list_transaction(request, part_id=None):
         'rates': get_valute(),
         'reset_filter': transact,
         'date_form': form_date,
+        'quantity': transact.count(),
     }
     return render(request, 'transaction/list.html', context=context)
 
