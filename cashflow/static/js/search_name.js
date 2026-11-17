@@ -5,7 +5,7 @@ function searchTransaction()  {
   input = document.getElementById("InputSearch");
   filter = input.value.toUpperCase();
   table = document.getElementById("table_transaction");
-  tr = table.getElementsByTagName("tr");
+  tr = table.querySelectorAll(".select_item");
 
   for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[1];
@@ -18,6 +18,8 @@ function searchTransaction()  {
       }
     }
   }
+  const visibleRows = Array.from(tr).filter(tr => tr.offsetParent !== null);
+  document.getElementById("text_amount").textContent = `Количество: ${visibleRows.length}`;
 }
 
 input_search.addEventListener('input', searchTransaction);
