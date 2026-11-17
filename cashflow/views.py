@@ -251,14 +251,22 @@ def edit_directory(request, method_object, select_edit):
 
 
 def add_transaction(request):
-    if request.method == 'POST':
-        form = FormTransaction(request.POST)
+    try:
+        if request.method == 'POST':
+            form = FormTransaction(request.POST)
 
-        if form.is_valid():
-            form.save()
-            return redirect('list')
-    else:
-        form = FormTransaction()
+            if form.is_valid():
+                form.save()
+                return redirect('list')
+        else:
+            form = FormTransaction()
+
+    except ValueError:
+        messages.error(
+            request,
+            f"Данная подкатегория не относится к категория"
+        )
+        return redirect('add_transaction')
 
     context = {
         'form': form,
