@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
@@ -54,8 +55,8 @@ class Transaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           editable=False)
     title = models.CharField(max_length=255, verbose_name="Название транзакции")
-    date = models.DateTimeField(default=timezone.now,
-                                verbose_name='Дата и время')  # фиксация момента времени совершения транзакции
+    date = models.DateField(default=timezone.now,
+                                verbose_name='Дата')  # фиксация момента времени совершения транзакции
     status = models.ForeignKey('Status', on_delete=models.RESTRICT, verbose_name='Статус')
     operation_type = models.ForeignKey('Type', on_delete=models.RESTRICT, verbose_name='Тип')
     categories = models.ForeignKey('Categories', on_delete=models.RESTRICT, verbose_name='Категория')
@@ -70,6 +71,14 @@ class Transaction(models.Model):
 
     def get_absolute_url(self):
         return reverse('transaction-details', args=[str(self.id)])
+
+    def clean(self):
+        super().clean()
+        if self.categories and self.subcategories:
+            if self.subcategories.category != self.categories:
+                raise ValidationError({
+                    'subcategory': 'Выбранная подкатегория не относится к указанной категории.'
+                })
 
     class Meta:
         verbose_name = "Транзакция"

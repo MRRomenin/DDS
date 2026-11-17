@@ -19,6 +19,17 @@
     {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
     {% endif %}
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     {{ form.non_field_errors }}
     <form method="POST">
         {% csrf_token %}
@@ -42,6 +53,6 @@
 
 {% block scripts %}
     {% if method == 'list' %}
-        <script src="{% static 'js/scripts.js' %}"></script>
+        <script src="{% static 'js/scripts.js' %}" defer></script>
     {% endif %}
 {% endblock %}

@@ -1,5 +1,6 @@
 const decimal_input = document.querySelector('#amount');
 const send_button = document.querySelector('#button_send');
+
 decimal_input.addEventListener('input', (e) => {
       let val = e.target.value;
       val = val.replace(/^[,.]/, '');
@@ -12,4 +13,4 @@ decimal_input.addEventListener('input', (e) => {
     input.classList.add('error');
   }
 
-})
+});

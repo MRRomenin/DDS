@@ -22,6 +22,17 @@ DIRECTORY_TRANSACTION = {
     'subcategories': SubCategories,
 }
 
+PARAMETERS_TRANSACTION = {
+    'date': 'date',
+    'title': 'title',
+    'status': 'status',
+    'operation_type': 'operation_type',
+    'categories': 'categories',
+    'subcategories': 'subcategories',
+    'amount': 'amount',
+    'comment': 'comment',
+}
+
 DICT_OBJECTS_FORM = {
     'obj_status': FormStatus,
     'obj_type': FormType,
@@ -69,27 +80,62 @@ def list_transaction(request, part_id=None):
 
     transact = Transaction.objects.all()
     form_date = FormDate(request.GET)
-    if form_date.is_valid():
 
+    if form_date.is_valid():
         start_date = form_date.cleaned_data.get('user_date_start')
         end_date = form_date.cleaned_data.get('user_date_end')
 
 
         if start_date:
-            transact = transact.filter(date__date__gte=start_date)
+            transact = transact.filter(date__gte=start_date)
         if end_date:
-            transact = transact.filter(date__date__lte=end_date)
+            transact = transact.filter(date__lte=end_date)
 
     elif form_date.is_bound:
         transact = Transaction.objects.none()
-        logger.info("start_date: %s", transact)
 
+    selected_field = ['date', 'title', 'status', 'operation_type', 'categories', 'subcategories', 'amount', 'comment']
+    model_filter = PARAMETERS_TRANSACTION
+
+    column_results = []
+
+    current = request.GET.get('sort', '')
+    current_key = current.lstrip('-')
+    is_desc = current.startswith('-')
+
+    for field in selected_field:
+        key = field if field in PARAMETERS_TRANSACTION else ''
+        state = ''
+        next_sort = key
+        if key and key == current_key:
+            state = 'desc' if is_desc else 'asc'
+            next_sort = key if is_desc else '-' + key
+        column_results.append({
+            'label': Transaction._meta.get_field(field).verbose_name,
+            'key': key,
+            'next': next_sort,
+            'state': state,
+        })
+
+    request_get = request.GET.get('sort', '')
+    sort_key = request_get.lstrip('-')
+    field = model_filter.get(sort_key)
+
+    if field:
+        prefix = '-' if request_get.startswith('-') else ''
+        transact = transact.order_by(prefix + field, '-date')
+
+    params = request.GET.copy()
+    params.pop('sort', None)
+    query_without_sort = params.urlencode()
 
     context = {
         'transacts': transact,
         'rates': get_valute(),
-        'reset_filter': transact,
         'date_form': form_date,
+        'quantity': transact.count(),
+        'columns': column_results,
+        'query_without_sort': query_without_sort,
     }
     return render(request, 'transaction/list.html', context=context)
 
@@ -143,7 +189,7 @@ def delete_directory(request, directory):
             selected_directory = request.POST.getlist('selected_items')
             logger.info(f"[INFO] selected_directory: {selected_directory}")
             if selected_directory:
-                model.objects.filter(pk__in=selected_directory).delete()
+               model.objects.filter(pk__in=selected_directory).delete()
             else:
                 messages.info(
                     request,
@@ -209,14 +255,22 @@ def edit_directory(request, method_object, select_edit):
 
 
 def add_transaction(request):
-    if request.method == 'POST':
-        form = FormTransaction(request.POST)
+    try:
+        if request.method == 'POST':
+            form = FormTransaction(request.POST)
 
-        if form.is_valid():
-            form.save()
-            return redirect('list')
-    else:
-        form = FormTransaction()
+            if form.is_valid():
+                form.save()
+                return redirect('list')
+        else:
+            form = FormTransaction()
+
+    except ValueError:
+        messages.error(
+            request,
+            f"Данная подкатегория не относится к категория"
+        )
+        return redirect('add_transaction')
 
     context = {
         'form': form,

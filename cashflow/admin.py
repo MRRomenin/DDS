@@ -12,10 +12,10 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'status'
                         , 'operation_type', 'categories', 'subcategories', 'amount', 'comment')
 
-    fields = ['title', 'date', 'status', 'operation_type',  ('categories', 'subcategories'),
+    fields = ['title', 'date', 'status', 'operation_type', ('categories', 'subcategories'),
               'amount', 'comment']
 
-    list_filter = ('date',) # fix it
+    list_filter = ('date',)
 
 
 @admin.register(Status)
@@ -24,11 +24,13 @@ class StatusAdmin(admin.ModelAdmin):
 
     fields = ['name_status']
 
+
 @admin.register(Type)
 class TypeAdmin(admin.ModelAdmin):
     list_display = ('type_operation',)
 
     fields = ['type_operation']
+
 
 @admin.register(Categories)
 class CategoriesAdmin(admin.ModelAdmin):
@@ -38,12 +40,11 @@ class CategoriesAdmin(admin.ModelAdmin):
 
     inlines = [SubcategoriesInline]
 
+
 @admin.register(SubCategories)
 class SubCategories(admin.ModelAdmin):
     list_display = ('category', 'subcategories')
 
     fields = ['category', 'subcategories']
-
-
 
 # Register your models here.

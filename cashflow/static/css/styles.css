@@ -14,11 +14,22 @@ body {
 }
 
 .custom-element {
-  background-color: #fff; /* Исходный цвет Bootstrap primary */
-  transition: background-color 0.3s ease, color 0.3s ease; /* Плавность для фона и текста */
+  background-color: #fff;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .custom-element:hover {
-  background-color: rgba(0,0,0, 0.075); /* Новый цвет при наведении (например, зеленый) */
+  background-color: rgba(0,0,0, 0.075);
   color: #0a0000;
+}
+
+
+#InputSearch {
+  background-image: url('../image/search.svg');
+  background-position: 5px 6px;
+  background-repeat: no-repeat;
+  width: 30%;
+  padding: 6px 20px 6px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 3px;
 }
