@@ -80,8 +80,8 @@ def list_transaction(request, part_id=None):
 
     transact = Transaction.objects.all()
     form_date = FormDate(request.GET)
-    if form_date.is_valid():
 
+    if form_date.is_valid():
         start_date = form_date.cleaned_data.get('user_date_start')
         end_date = form_date.cleaned_data.get('user_date_end')
 
@@ -189,7 +189,7 @@ def delete_directory(request, directory):
             selected_directory = request.POST.getlist('selected_items')
             logger.info(f"[INFO] selected_directory: {selected_directory}")
             if selected_directory:
-                model.objects.filter(pk__in=selected_directory).delete()
+               model.objects.filter(pk__in=selected_directory).delete()
             else:
                 messages.info(
                     request,

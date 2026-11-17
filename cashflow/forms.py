@@ -19,12 +19,12 @@ class FormTransaction(forms.ModelForm):
             'categories': forms.Select(attrs={'class': 'form-select'}),
             'subcategories': forms.Select(attrs={'class': 'form-select'}),
             'amount': forms.TextInput(attrs={'class': 'form-control',
-                                               'id': "amount",
-                                               'name': "amount",
-                                               'placeholder': "Например, 1500.50",
-                                               'inputmode': 'decimal',
+                                             'id': "amount",
+                                             'name': "amount",
+                                             'placeholder': "Например, 1500.50",
+                                             'inputmode': 'decimal',
                                              'minlength': 1,
-                                             'maxlength': 12 }),
+                                             'maxlength': 12}),
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'id': "comment", 'name': "comment"}),
         }
 
