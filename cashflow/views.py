@@ -87,9 +87,9 @@ def list_transaction(request, part_id=None):
 
 
         if start_date:
-            transact = transact.filter(date__date__gte=start_date)
+            transact = transact.filter(date__gte=start_date)
         if end_date:
-            transact = transact.filter(date__date__lte=end_date)
+            transact = transact.filter(date__lte=end_date)
 
     elif form_date.is_bound:
         transact = Transaction.objects.none()

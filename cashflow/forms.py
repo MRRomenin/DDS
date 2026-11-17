@@ -1,6 +1,7 @@
 from django import forms
 # from django.core.exceptions import ValidationError
 from .models import Status, Type, Categories, SubCategories, Transaction
+from datetime import date
 
 MIN_DATE = date(2000, 1, 1)
 
@@ -89,8 +90,8 @@ class FormSubCategories(forms.ModelForm):
 
 
 class FormDate(forms.Form):
-    user_date_start = forms.DateField(required=False, label="С", widget=forms.DateInput(attrs={'type': 'date', 'id': "date_picker_start"}, format='%Y-%m-%d'))
-    user_date_end = forms.DateField(required=False, label="по", widget=forms.DateInput(attrs={'type': 'date', 'id': "date-picker_end"}, format='%Y-%m-%d'))
+    user_date_start = forms.DateField(required=False, label="С", widget=forms.DateInput(attrs={'type': 'date', 'id': "date_picker_start", 'min': MIN_DATE}, format='%Y-%m-%d'))
+    user_date_end = forms.DateField(required=False, label="по", widget=forms.DateInput(attrs={'type': 'date', 'id': "date-picker_end", 'min': MIN_DATE}, format='%Y-%m-%d'))
     def clean(self):
         date_start = self.cleaned_data.get('user_date_start')
         date_end = self.cleaned_data.get('user_date_end')
