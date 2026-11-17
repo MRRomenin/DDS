@@ -41,6 +41,15 @@ class FormTransaction(forms.ModelForm):
             raise forms.ValidationError('Сумма должна быть больше нуля')
         return amount
 
+    def clean(self):
+        cleaned_data = super().clean()
+        categories = cleaned_data.get('category')
+        subcategories = cleaned_data.get('subcategory')
+        if categories and subcategories and subcategories.category != categories:
+            self.add_error('subcategory', 'Подкатегория не принадлежит выбранной категории.')
+
+        return cleaned_data
+
 
 class FormStatus(forms.ModelForm):
     class Meta:

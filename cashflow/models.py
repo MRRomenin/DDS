@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
@@ -70,6 +71,14 @@ class Transaction(models.Model):
 
     def get_absolute_url(self):
         return reverse('transaction-details', args=[str(self.id)])
+
+    def clean(self):
+        super().clean()
+        if self.categories and self.subcategories:
+            if self.subcategories.category != self.categories:
+                raise ValidationError({
+                    'subcategory': 'Выбранная подкатегория не относится к указанной категории.'
+                })
 
     class Meta:
         verbose_name = "Транзакция"
