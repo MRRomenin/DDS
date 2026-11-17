@@ -54,8 +54,8 @@ class Transaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           editable=False)
     title = models.CharField(max_length=255, verbose_name="Название транзакции")
-    date = models.DateTimeField(default=timezone.now,
-                                verbose_name='Дата и время')  # фиксация момента времени совершения транзакции
+    date = models.DateField(default=timezone.now,
+                                verbose_name='Дата')  # фиксация момента времени совершения транзакции
     status = models.ForeignKey('Status', on_delete=models.RESTRICT, verbose_name='Статус')
     operation_type = models.ForeignKey('Type', on_delete=models.RESTRICT, verbose_name='Тип')
     categories = models.ForeignKey('Categories', on_delete=models.RESTRICT, verbose_name='Категория')

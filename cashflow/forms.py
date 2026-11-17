@@ -2,15 +2,17 @@ from django import forms
 # from django.core.exceptions import ValidationError
 from .models import Status, Type, Categories, SubCategories, Transaction
 
+MIN_DATE = date(2000, 1, 1)
 
 class FormTransaction(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ('title', 'status', 'operation_type', 'categories',
+        fields = ('date','title', 'status', 'operation_type', 'categories',
                   'subcategories', 'amount', 'comment',)
         localized_fields = ('amount',)
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'},),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'min': MIN_DATE,}, format='%Y-%m-%d'),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'operation_type': forms.Select(attrs={'class': 'form-select'}),
             'categories': forms.Select(attrs={'class': 'form-select'}),
