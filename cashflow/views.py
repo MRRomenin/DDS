@@ -128,7 +128,6 @@ def list_transaction(request, part_id=None):
     context = {
         'transacts': transact,
         'rates': get_valute(),
-        'reset_filter': transact,
         'date_form': form_date,
         'quantity': transact.count(),
         'columns': column_results,
