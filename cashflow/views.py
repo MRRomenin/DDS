@@ -93,7 +93,11 @@ def list_transaction(request, part_id=None):
 
     elif form_date.is_bound:
         transact = Transaction.objects.none()
-        logger.info("start_date: %s", transact)
+
+    selected_field = ['date', 'title', 'status', 'operation_type', 'categories', 'subcategories', 'amount', 'comment']
+    model_filter = PARAMETERS_TRANSACTION
+
+    column_results = []
 
     current = request.GET.get('sort', '')
     current_key = current.lstrip('-')
