@@ -17,9 +17,11 @@
 
             {{ date_form.user_date_end.label_tag }}
                   {{ date_form.user_date_end}}
-
+        {% if request.GET.sort %}
+          <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+        {% endif %}
         <button type="submit" class="btn btn-primary" id="submitButton" disabled>Применить</button>
-        {% if request.GET.user_date_start or request.GET.user_date_end %}
+        {% if request.GET.user_date_start or request.GET.user_date_end or request.GET.sort %}
         <a href="{% url 'list' %}" class="btn btn-outline-secondary">Сбросить</a>
         {% endif %}
 
@@ -51,14 +53,14 @@
                 <table class="table table-hover align-middle mb-0" id="table_transaction">
                     <thead class="table-light text-uppercase fs-10 text-muted tracking-wide">
                         <tr>
-                            <th scope="col" class="py-3 ps-4">Дата</th>
-                            <th scope="col" class="py-3 ps-4">Название</th>
-                            <th scope="col" class="py-3">Статус</th>
-                            <th scope="col" class="py-3">Тип</th>
-                            <th scope="col" class="py-3">Категория</th>
-                            <th scope="col" class="py-3">Подкатегория</th>
-                            <th scope="col" class="py-3 text-end">Сумма</th>
-                            <th scope="col" class="py-3 pe-4">Комментарий</th>
+                            {% for column in columns %}
+                            {% if column.key %}
+                                <th scope="col" class="py-3">
+                                    <a href="?sort={{ column.next }}&{{ query_without_sort }}" class="btn">{{ column.label }} {% if column.state == 'asc' %}▲{% elif column.state == 'desc' %}▼{% endif %}</a>
+                                </th>
+                                {% endif %}
+                            {% endfor %}
+
                             <th scope="col" class="py-3 pe-4"></th>
                             <th scope="col" class="py-3 pe-4"></th>
                         </tr>

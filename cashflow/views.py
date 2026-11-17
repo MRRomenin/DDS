@@ -22,6 +22,17 @@ DIRECTORY_TRANSACTION = {
     'subcategories': SubCategories,
 }
 
+PARAMETERS_TRANSACTION = {
+    'date': 'date',
+    'title': 'title',
+    'status': 'status',
+    'operation_type': 'operation_type',
+    'categories': 'categories',
+    'subcategories': 'subcategories',
+    'amount': 'amount',
+    'comment': 'comment',
+}
+
 DICT_OBJECTS_FORM = {
     'obj_status': FormStatus,
     'obj_type': FormType,
@@ -84,6 +95,35 @@ def list_transaction(request, part_id=None):
         transact = Transaction.objects.none()
         logger.info("start_date: %s", transact)
 
+    current = request.GET.get('sort', '')
+    current_key = current.lstrip('-')
+    is_desc = current.startswith('-')
+
+    for field in selected_field:
+        key = field if field in PARAMETERS_TRANSACTION else ''
+        state = ''
+        next_sort = key
+        if key and key == current_key:
+            state = 'desc' if is_desc else 'asc'
+            next_sort = key if is_desc else '-' + key
+        column_results.append({
+            'label': Transaction._meta.get_field(field).verbose_name,
+            'key': key,
+            'next': next_sort,
+            'state': state,
+        })
+
+    request_get = request.GET.get('sort', '')
+    sort_key = request_get.lstrip('-')
+    field = model_filter.get(sort_key)
+
+    if field:
+        prefix = '-' if request_get.startswith('-') else ''
+        transact = transact.order_by(prefix + field, '-date')
+
+    params = request.GET.copy()
+    params.pop('sort', None)
+    query_without_sort = params.urlencode()
 
     context = {
         'transacts': transact,
@@ -91,6 +131,8 @@ def list_transaction(request, part_id=None):
         'reset_filter': transact,
         'date_form': form_date,
         'quantity': transact.count(),
+        'columns': column_results,
+        'query_without_sort': query_without_sort,
     }
     return render(request, 'transaction/list.html', context=context)
 
