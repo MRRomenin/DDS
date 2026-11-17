@@ -40,6 +40,9 @@
             </form>
         </div>
         <input type="text" id="InputSearch" class="rounded-4" placeholder="Поиск по названию транзакции..">
+        <div>
+             <a href="{% url 'load_xlsx' %}?{{ request.GET.urlencode }}" class="btn btn-success">Выгрузить в xlsx</a>
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">

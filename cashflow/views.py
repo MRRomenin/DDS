@@ -10,6 +10,9 @@ from django.db.models import ProtectedError, RestrictedError
 from django.contrib import messages
 from django.http import Http404
 from django.forms import modelformset_factory
+import pandas as pd
+from django.http import FileResponse
+import io
 
 
 CB_URL = "http://www.cbr.ru/scripts/XML_daily.asp"
@@ -138,6 +141,27 @@ def list_transaction(request, part_id=None):
         'query_without_sort': query_without_sort,
     }
     return render(request, 'transaction/list.html', context=context)
+
+
+def load_xlsx(request):
+    selected_field = ['date', 'title', 'status', 'operation_type', 'categories', 'subcategories', 'amount', 'comment']
+    selected_fields = ['date', 'title', 'status__name_status', 'operation_type__type_operation', 'categories__categories', 'subcategories__subcategories', 'amount', 'comment']
+    data_tuples = list(Transaction.objects.values(*selected_fields ))
+    selected_fields_verbose_name = [Transaction._meta.get_field(field).verbose_name for field in selected_field]
+    df = pd.DataFrame(data_tuples)
+    buffer = io.BytesIO()
+    df.columns = selected_fields_verbose_name
+    df.to_excel(buffer, sheet_name='Лист1', index=False)
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='output.xlsx')
+
+
+# def load_csv(selected_field):
+#     data_tuples = list(Transaction.objects.values(*selected_field))
+#     with open("output.csv", "w", newline="", encoding="utf-8-sig") as csvfile:
+#         writer = csv.DictWriter(csvfile, fieldnames=selected_field, delimiter=";")
+#         writer.writeheader()
+#         writer.writerows(data_tuples)
 
 
 def delete_transaction(response_object: Transaction):
