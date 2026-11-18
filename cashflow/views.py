@@ -144,13 +144,49 @@ def list_transaction(request, part_id=None):
 
 
 def load_xlsx(request):
-    selected_field = ['date', 'title', 'status', 'operation_type', 'categories', 'subcategories', 'amount', 'comment']
-    selected_fields = ['date', 'title', 'status__name_status', 'operation_type__type_operation', 'categories__categories', 'subcategories__subcategories', 'amount', 'comment']
-    data_tuples = list(Transaction.objects.values(*selected_fields ))
-    selected_fields_verbose_name = [Transaction._meta.get_field(field).verbose_name for field in selected_field]
-    df = pd.DataFrame(data_tuples)
+
+    ################################################################
+    # TODO: вынести в общую функцию, дублирует list_transaction
+    transact = Transaction.objects.all()
+
+    if 'user_date_start' in request.GET or 'user_date_end' in request.GET:
+        form_date = FormDate(request.GET)
+        if form_date.is_valid():
+            start_date = form_date.cleaned_data.get('user_date_start')
+            end_date = form_date.cleaned_data.get('user_date_end')
+            if start_date:
+                transact = transact.filter(date__date__gte=start_date)
+            if end_date:
+                transact = transact.filter(date__date__lte=end_date)
+        else:
+            transact = Transaction.objects.none()
+
+    sort_param = request.GET.get('sort', '')
+    sort_field = PARAMETERS_TRANSACTION.get(sort_param.lstrip('-'))
+    if sort_field:
+        prefix = '-' if sort_param.startswith('-') else ''
+        transact = transact.order_by(prefix + sort_field, '-date')
+
+    columns = [
+        ('date', 'date'),
+        ('title', 'title'),
+        ('status__name_status', 'status'),
+        ('operation_type__type_operation', 'operation_type'),
+        ('categories__categories', 'categories'),
+        ('subcategories__subcategories', 'subcategories'),
+        ('amount', 'amount'),
+        ('comment', 'comment'),
+    ]
+    query_fields = [query for query, _ in columns]
+    labels = [str(Transaction._meta.get_field(model_field).verbose_name)
+              for _, model_field in columns]
+
+    ################################################################
+
+    df = pd.DataFrame(list(transact.values(*query_fields)), columns=query_fields)
+    df.columns = labels
+
     buffer = io.BytesIO()
-    df.columns = selected_fields_verbose_name
     df.to_excel(buffer, sheet_name='Лист1', index=False)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='output.xlsx')
