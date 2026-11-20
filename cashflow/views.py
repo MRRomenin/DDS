@@ -107,12 +107,20 @@ def list_transaction(request, part_id=None):
     is_desc = current.startswith('-')
 
     for field in selected_field:
-        key = field if field in PARAMETERS_TRANSACTION else ''
+        key = ''
         state = ''
+        if field in PARAMETERS_TRANSACTION:
+            key = field
+
         next_sort = key
         if key and key == current_key:
-            state = 'desc' if is_desc else 'asc'
-            next_sort = key if is_desc else '-' + key
+            if is_desc:
+                state = 'desc'
+                next_sort = key
+            else:
+                state = 'asc'
+                next_sort = '-' + key
+
         column_results.append({
             'label': Transaction._meta.get_field(field).verbose_name,
             'key': key,
@@ -164,7 +172,9 @@ def load_xlsx(request):
     sort_param = request.GET.get('sort', '')
     sort_field = PARAMETERS_TRANSACTION.get(sort_param.lstrip('-'))
     if sort_field:
-        prefix = '-' if sort_param.startswith('-') else ''
+        prefix = ''
+        if sort_param.startswith('-'):
+            prefix = '-'
         transact = transact.order_by(prefix + sort_field, '-date')
 
     columns = [
