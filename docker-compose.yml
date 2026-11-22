@@ -1,0 +1,34 @@
+services:
+  dds_postgres:
+    image: postgres:18-alpine3.23
+    container_name: dds_postgres
+    volumes:
+      - db_data:/var/lib/postgresql
+    env_file:
+      - .env
+
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+
+
+
+  dds_project:
+    image: django-docker:latest
+    container_name: dds_project
+    depends_on:
+      - dds_postgres
+    env_file:
+      - .env
+
+    ports:
+      - "8000:8000"
+
+    environment:
+      DB_HOST: dds_postgres
+
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+volumes:
+  db_data:
