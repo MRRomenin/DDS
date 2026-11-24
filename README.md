@@ -90,5 +90,6 @@ docker compose up -d --build
 ```
 После запуска сервис будет доступен по адресу: `http://localhost:8000`
 
+
 ---
-Запуска проекта локально прошу сюда -> [Инструкция по локальному запуску](README_LOCAL_SETUP.md)
+Запуск проекта локально прошу сюда  [Инструкция по локальному запуску](README_LOCAL_SETUP.md) <img src="https://www.kolobok.us/smiles/standart/declare.gif" align="absmiddle" width="35" alt="secret" />
