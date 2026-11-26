@@ -84,7 +84,7 @@ cp .env_example .env
 
 ### Запуск Docker
 
-Далее разворачиваем образ и создаем в контейнере docker-compose
+Далее разворачиваем образ и создаем контейнер
 ```bash
 docker compose up -d --build
 ```
