@@ -12,13 +12,22 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
 
+    healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+          interval: 10s
+          retries: 5
+          start_period: 30s
+          timeout: 10s
 
 
   dds_project:
+    build: .
     image: django-docker:latest
     container_name: dds_project
     depends_on:
-      - dds_postgres
+      dds_postgres:
+        condition: service_healthy
+
     env_file:
       - .env
 
