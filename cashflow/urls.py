@@ -10,4 +10,5 @@ urlpatterns = [
     path('edit/<uuid:part_id>/', views.edit_transaction, name='edit_part'),
     path('add_directory/<slug:method_object>/', views.add_directory, name='add_directory'),
     path('edit_directory/<slug:method_object>/<slug:select_edit>/', views.edit_directory, name='edit_directory'),
+    path('download/', views.load_xlsx, name='load_xlsx')
 ]
