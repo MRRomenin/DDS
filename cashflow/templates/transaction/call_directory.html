@@ -5,8 +5,7 @@
         {{ title }}
     </div>
     <div class="card-body">
-        <form method="POST"
-              onsubmit="return confirm('?');">
+        <form method="POST">
             {% csrf_token %}
             {% for item in items %}
             <div class="m-1">
@@ -19,7 +18,7 @@
             {% empty %}
             <div class="text-muted">{{ empty_text }}</div>
             {% endfor %}
-            <button type="submit" class="btn btn-danger mt-3" formaction="{% url 'delete_mass' url_key %}"
+            <button type="submit" class="btn btn-danger mt-3"  formaction="{% url 'delete_mass' url_key %}" onclick="return confirm('Вы уверены, что хотите удалить выбранное?');"
                     {% if not items %}
                     disabled
                     {% endif %}>
@@ -28,7 +27,8 @@
             <button type="submit" class="btn btn-primary mt-3" formmethod="GET" formaction="{% url 'edit_directory' url_key url_obj %}"
                     {% if not items %}
                     disabled
-                    {% endif %}>
+                    {% endif %}
+                    onclick="return confirm('Редактировать выбранное?');">
                 Редактировать
             </button>
 
