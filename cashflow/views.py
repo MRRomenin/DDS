@@ -257,7 +257,6 @@ def delete_directory(request, directory):
     try:
         if request.method == 'POST':
             selected_directory = request.POST.getlist('selected_items')
-            logger.info(f"[INFO] selected_directory: {selected_directory}")
             if selected_directory:
                model.objects.filter(pk__in=selected_directory).delete()
             else:
