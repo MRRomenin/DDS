@@ -44,14 +44,15 @@ pip install -r requirements.txt
 cp .env_example .env
 ```
 
-### Применение миграций и запуск сервера
+### Применение миграций, создание папки для статических файлов и запуск сервера
 
 ```bash
 python manage.py migrate
+python manage.py collectstatic
 python manage.py runserver
 ```
----
+
 После запуска сервис будет доступен по адресу: `http://localhost:8000`
 
 
-[← Вернуться на главную](README.md)
+[← Вернуться на главную](README.md) <img src="https://www.kolobok.us/smiles/standart/declare.gif" align="absmiddle" width="35" alt="secret" />

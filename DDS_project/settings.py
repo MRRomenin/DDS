@@ -96,6 +96,10 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST', default="localhost"),
         'PORT': os.getenv('DB_PORT', default="5432")
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / os.getenv('DB_NAME', 'db.sqlite3'),
+    # }
 }
 
 
@@ -134,11 +138,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
