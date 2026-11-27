@@ -65,6 +65,41 @@
 * **Категории → Типы:** категории привязаны к определённым типам операций.
   * *Пример:* к типу `Списание` относится категория `Маркетинг`, в которую входят подкатегории `Farpost` и `Avito`.
 
+## Демонстрация работы проекта
+
+
+### Добавление справочника
+https://github.com/user-attachments/assets/19910b13-5d8d-4f71-80ac-a96a49cdbce5
+
+### Удаление из справочника
+Можно удалить несколько значений из списка
+
+https://github.com/user-attachments/assets/1ad2cabc-9c42-48c9-9ec6-4c57a6cd884d
+
+### Добавление с зависимостями
+
+https://github.com/user-attachments/assets/55bb9dc2-4cc4-40b1-8033-94507132b433
+
+### Удаление с зависимостями
+
+https://github.com/user-attachments/assets/5d47318e-1830-4b55-b406-11612a288699
+
+### Добавление транзакции
+
+https://github.com/user-attachments/assets/f26eb031-e5b9-491b-b9ed-d6299cf63be9
+
+### Изменение транзакции
+
+Также можно удалить транзакции
+
+https://github.com/user-attachments/assets/2636670b-2a48-41e3-8108-de497cea57ee
+
+### Фильтрация данных
+
+https://github.com/user-attachments/assets/e539e7f7-1dcf-49b3-bc69-fd78cbe98b05
+
+При нажатии на кнопку "Выгрузить в xlsx" скачается таблица в формате excel
+<img width="1433" height="700" alt="image" src="https://github.com/user-attachments/assets/3cab7b3a-62ea-4243-b240-4ab0ed090bae" />
 
 ## Запуск проекта
 
